@@ -1,20 +1,31 @@
 <template>
 	<div class="absolute z-50 left-0 top-0 h-screen max-h-screen w-screen bg-black/30 flex items-center justify-end">
 		  <div class="relative flex flex-col bg-background border-l-2 border-first py-8 min-w-96 w-5/12 max-w-[40vw] min-h-96 h-screen">
-			  <button @click="emit('closeclicked')" class="absolute right-2 top-2 p-1 rounded-lg bg-red-500/40"><nuxt-img class="h-5 w-5" src="/icons/x.svg"  alt="X" /></button>
-			  <div class="w-full pb-4 border-b-2 border-first px-4">
+			<div class="flex gap-2 absolute right-2 top-2 p-1">
+				<button @click="emit('removetask')" class="p-1 rounded-lg bg-red-600/40"><nuxt-img class="h-5 w-5" src="/icons/trash.svg"  alt="X" /></button>
+				<button @click="emit('edittask')" class="p-1 rounded-lg bg-yellow-500/40"><nuxt-img class="h-5 w-5" src="/icons/pencil.svg"  alt="X" /></button>
+
+				<button @click="emit('closeclicked')" class="p-1 rounded-lg bg-red-500/40"><nuxt-img class="h-5 w-5" src="/icons/x.svg"  alt="X" /></button>
+			</div>
+
+			<div class="w-full pb-4 border-b-2 border-first px-4">
 				<button @click="markdone(task.done)" v-if="task.done" class="text-sm flex items-center gap-2 px-2 py-1 bg-green-500/20 border-2 border-green-600/60 rounded-xl"><img class="h-4 w-4" src="/icons/check.svg" alt=""> Mark as not done</button>
 				<button @click="markdone(task.done)" v-else class="text-sm flex items-center gap-2 px-2 py-1 border-2 border-second rounded-xl"><img class="h-4 w-4" src="/icons/check.svg" alt=""> Mark as done</button>
-			  </div>
-			  <div class="relative h-full toscroll overflow-y-auto pt-4">
-				  <div class="px-4">
+			</div>
+			<div class="relative h-full toscroll overflow-y-auto pt-4">
+				<div class="px-4">
 					<h2>{{ task.title }}</h2>
-					<div class="mt-10 pl-8 text-white/90">
+					<div class="mt-10 pl-8 text-white/90 flex flex-col gap-2">
 						<div class="flex gap-4">
 							<p>Users assigned:</p>
 							<div>
 								<span class="text-white/80" v-if="task.users.data.length == 0" >None</span>
-								<span class="text-white/80" v-else v-for="user in task.users.data">{{ user.attributes.username }}, </span>
+								<div v-else class="flex">
+									<div v-for="usr in task.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
+										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'http://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
+										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="flex gap-4">
@@ -163,7 +174,7 @@
 <script lang="ts" setup>
 
 const props = defineProps(['taskid',]);
-const emit = defineEmits(['closeclicked']);
+const emit = defineEmits(['closeclicked', 'edittask', 'removetask']);
 
 const router = useRouter();
   
@@ -179,7 +190,7 @@ const {data: user} = await useFetch(`http://strapi.denalify.com/api/users/me?pop
 
 
 
-const {data: tasks} = await useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}?populate=*`, {
+const {data: tasks} = await useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}?populate=board&populate=comments&populate=users&populate[users][populate]=avatar`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -194,9 +205,6 @@ const {data: comments} = await useFetch(`http://strapi.denalify.com/api/comments
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
 });
-
-
-console.log(comments)
 
 
 import StarterKit from '@tiptap/starter-kit'

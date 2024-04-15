@@ -5,7 +5,9 @@
 		<PopupSectionEdit v-if="editBoardPopup" :sectionid="sectionid"  @closeclicked="editBoardPopup = false" />
 		<PopupSectionRemove v-if="removeBoardPopup" :sectionid="sectionid"  @closeclicked="removeBoardPopup = false" />
 		<PopupTaskNew v-if="newTaskPopup" :sectionid="sectionid" :orgid="orgid" @closeclicked="newTaskPopup = false"/>
-		<PopupTaskSee v-if="seeTaskPopup" :taskid="taskid" @closeclicked="seeTaskPopup = false" />
+		<PopupTaskSee v-if="seeTaskPopup" :taskid="taskid" @closeclicked="seeTaskPopup = false"  @edittask="editTask" @removetask="removetask" />
+		<PopupTaskEdit v-if="editTaskPopup" :taskid="taskid" :orgid="orgid" @closeclicked="editTaskPopup = false" />
+		<PopupTaskRemove v-if="removeTaskPopup" :taskid="taskid" @closeclicked="removeTaskPopup = false" />
 
 
 		<div class="w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col justify-between">
@@ -67,8 +69,11 @@
 								<div class="absolute left-2 bottom-2">
 									<p class="text-xs px-1.5 py-0.5 rounded-md border-2" :class="{'bg-blue-500/40': task.attributes.priority=='normal', 'border-blue-500': task.attributes.priority=='normal', 'bg-green-500/40': task.attributes.priority=='none', 'border-green-500/40': task.attributes.priority=='none', 'bg-red-500/40': task.attributes.priority=='important', 'border-red-500/40': task.attributes.priority=='important'}" >{{ task.attributes.priority }}</p>
 								</div>
-								<div class="absolute right-2 bottom-2 flex gap-1">
-									<p v-for="usr in task.attributes.users.data"  class="text-[0.5rem] px-1.5 py-0.5 rounded-md bg-white/20 border-2" >{{ usr.attributes.username }}</p>
+								<div class="absolute right-4 bottom-2 flex">
+									<div v-for="usr in task.attributes.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
+										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'http://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
+										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
+									</div>
 								</div>
 							</section>
 						</template>
@@ -187,18 +192,13 @@ projectdata = pro.value.data.attributes
 
 for (const board in projectdata.boards.data) {
 	const { data: boards } = await useFetch(
-	`http://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users`, {
+	`http://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 	})
-
 	boardsdata.push(boards)
-
-
 }
-
-console.log(boardsdata)
 
 let newBoardPopup = ref(false);
 let newBoard = () => {
@@ -231,6 +231,19 @@ let seeTask = (e) => {
 		taskid.value = e.target.closest('section').getAttribute('data-taskid')
 		seeTaskPopup.value = true
 	}
+}
+
+
+let editTaskPopup = ref(false)
+let editTask = () => {
+	seeTaskPopup.value = false
+	editTaskPopup.value = true
+}
+
+let removeTaskPopup = ref(false)
+let removetask = () => {
+	seeTaskPopup.value = false
+	removeTaskPopup.value = true
 }
 
 

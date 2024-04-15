@@ -3,7 +3,7 @@
 		  <div class="relative bg-background rounded-2xl border-2 border-first py-8 min-w-96 w-fit min-h-96 h-fit">
 			  <button @click="emit('closeclicked')" class="absolute right-2 top-2 p-1 rounded-lg bg-red-500/40"><nuxt-img class="h-5 w-5" src="/icons/x.svg"  alt="X" /></button>
 			  <div class="w-full pb-4 border-b-2 border-first px-4 mb-4">
-				  <h4 class="text-white">Create new task</h4>
+				  <h4 class="text-white">Edit task</h4>
 			  </div>
 			  <div class="px-4">
 				  <div>
@@ -44,7 +44,7 @@
 				  </div>
 				  <div class="mt-4 text-white">
   
-					  <button @click="createTask"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Create</button>
+					  <button @click="editTask"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Save</button>
 				  </div>
 			  </div>
 			  
@@ -56,14 +56,15 @@
   
 
 <script lang="ts" setup>
-const props = defineProps(['sectionid', 'orgid']);
+const props = defineProps(['taskid', 'orgid']);
 const emit = defineEmits(['closeclicked'])
 
 const router = useRouter()
   
 let users = ref()
 
-let selectendUsers = ref([])
+
+let selectendUsers = []
 
 const {data: org} = await useFetch(`http://strapi.denalify.com/api/organizations/${props.orgid}?populate=*`, {
 	headers: {
@@ -72,18 +73,32 @@ const {data: org} = await useFetch(`http://strapi.denalify.com/api/organizations
 })
 users.value = org.value.data.attributes.users;
 
+let {data: task} = await useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}?populate=users`, {
+	headers: {
+		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	},
+})
 
+console.log(task.value.data.attributes)
 
-let name = ref()
-let priority = ref('sel')
-let date = ref()
+selectendUsers = ref(task.value.data.attributes.users.data)
+let name = ref(task.value.data.attributes.title)
+let priority = ref(task.value.data.attributes.priority)
+let date = ref(task.value.data.attributes?.end)
 
-let createTask = () => {
+for (const usr in task.value.data.attributes.users.data) {
+	selectendUsers.value.push(task.value.data.attributes.users.data[usr].id)
+	console.log(task.value.data.attributes.users.data[usr].id)
+}
+
+console.log(selectendUsers)
+
+let editTask = () => {
 	
 	console.log(selectendUsers.value)
 	const newBoard = useFetch(
-		`http://strapi.denalify.com/api/tasks`, {
-			method: 'POST',
+		`http://strapi.denalify.com/api/tasks/${props.taskid}`, {
+			method: 'PUT',
 			headers: {
 				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 			},
@@ -92,7 +107,7 @@ let createTask = () => {
 					title: name.value,
 					priority: priority.value,
 					board: props.sectionid,
-					users: selectendUsers.value,
+					users: selectendUsers,
 					end: date.value
 				}
 

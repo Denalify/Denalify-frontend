@@ -13,7 +13,7 @@
 				<div class="w-full h-full bg-first/50 rounded-3xl p-6">
 					<div class="flex flex-wrap gap-6">
 						<div>
-							<img v-if="orgs.data.attributes.logo.data" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-contain" :src="'http://185.201.115.165:1337'+ orgs.data.attributes.logo.data.attributes.url" alt="">
+							<img v-if="orgs.data.attributes.logo.data" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-contain" :src="'http://strapi.denalify.com'+ orgs.data.attributes.logo.data.attributes.url" alt="">
 							<div v-else  class="h-36 w-36 bg-slate-600 rounded-2xl"></div>
 						</div>
 						<div>
@@ -85,8 +85,6 @@ const {data: orgs} = await useFetch(`http://strapi.denalify.com/api/organization
 	},
 })
 
-console.log(orgs)
-console.log(user)
 
 let haveorg = ref(false)
 for (const organ in user.value.organizations) {

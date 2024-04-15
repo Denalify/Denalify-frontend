@@ -17,14 +17,14 @@
 							<div v-for="org in orgs" :data-orgid="org.id"  class="organization mt-3 bg-first/70 py-2 px-2 rounded-xl duration-150">
 								
 								<button @click="toggleOrg" class="w-full flex items-center gap-4">
-									<p>{{ org.attributes.name }}</p>
+									<p>{{ org.name }}</p>
 									<NuxtImg src="/icons/caret-down.svg" alt="\/" class="h-4 w-4 arrow duration-150 -rotate-90" />
 								</button>
 								<div class="projects mt-2 flex flex-col gap-0.5 hidden">
 
-									<NuxtLink :to="'/'+org.attributes.name+'/'+pro.attributes.slug" v-for="pro in org.attributes.pojects.data"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
-										<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
-										<p>{{pro.attributes.nazwa}}</p>
+									<NuxtLink :to="'/'+org.name+'/'+pro.slug" v-for="pro in org.pojects"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
+										<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.color"></div>
+										<p>{{pro.nazwa}}</p>
 									</NuxtLink>
 
 
@@ -39,7 +39,7 @@
 							
 							<button @click="createOrg = true" class="flex gap-4">
 								<NuxtImg src="/icons/plus.svg" alt="+" class="h-6 w-6 opacity-50" />
-								<p class="text-white/50">Add project</p>
+								<p class="text-white/50">New organization</p>
 							</button>
 						</button>
 
@@ -75,22 +75,13 @@ const logoutButton = () => {
 
 let orgs: any[] = []
 
-const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?populate=*', {
+const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?populate=organizations&populate=avatar&populate=admin_in_organizations&populate=comments&populate[organizations][populate]=*', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
 })
 
-
-for (const or in user.value.organizations) {
-	const {data} = await useFetch(`http://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=*`, {
-		headers: {
-			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		},
-	})
-	orgs.push(data.value.data)
-}
-
+orgs = user.value.organizations
 
 
 let createOrg = ref(false)
@@ -98,8 +89,6 @@ let toggleOrg = (e) => {
 	e.target.closest('div').querySelector('.projects').classList.toggle('hidden')
 	e.target.closest('div').querySelector('.arrow').classList.toggle('-rotate-90')
 }
-
-
 
 let orgid = ref()
 let newProject = ref(false)
