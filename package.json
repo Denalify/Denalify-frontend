@@ -23,7 +23,8 @@
     "@tiptap/vue-3": "^2.3.0",
     "nuxt": "^3.10.2",
     "vue": "^3.4.19",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "sass": "^1.74.1"

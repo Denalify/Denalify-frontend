@@ -48,17 +48,37 @@
 					</div>
 				</div>
 			
-				<div class="px-2 py-0.5 w-full min-h-96 h-full rounded-xl bg-gradient-to-b from-second/30 to-transparent">
-					<section @click="seeTask" v-for="task in board.value.data.attributes.tasks.data" :data-taskid="task.id"  class="z-0 relative pb-14 px-2 pt-2 my-2 w-full min-h-24 bg-third/20 border-2 border-third/40 hover:border-third duration-200 cursor-pointer rounded-lg">
-						<div class="flex gap-2">
-							<button class="h-6 min-w-6 bg-first/60 p-1 rounded-full border-2 border-third/50"><img class="h-3 w-3" src="/icons/check.svg" alt="x"></button>
-							<p class="text-sm">{{ task.attributes.title }}</p>
-						</div>
-						<div class="absolute left-2 bottom-2">
-							<p class="text-xs px-1.5 py-0.5 rounded-md border-2" :class="{'bg-blue-500/40': task.attributes.priority=='normal', 'border-blue-500': task.attributes.priority=='normal', 'bg-green-500/40': task.attributes.priority=='none', 'border-green-500/40': task.attributes.priority=='none', 'bg-red-500/40': task.attributes.priority=='important', 'border-red-500/40': task.attributes.priority=='important'}" >{{ task.attributes.priority }}</p>
-						</div>
-					</section>
-				</div>
+				<draggable 
+					group="tasks" 
+					item-key="id" 
+					@end="end" 
+					@change="change"
+					v-model="board.value.data.attributes.tasks.data" 
+					:data-boardid="board.value.data.id" 
+					 class="px-2 py-0.5 w-full min-h-96 h-full rounded-xl bg-gradient-to-b from-second/30 to-transparent">
+						<template #item="{ element: task }" :key="task.id">
+							<section @click="seeTask" :data-taskid="task.id" :key="task.id"  class="z-0 relative pb-14 px-2 pt-2 my-2 w-full min-h-24 duration-200 cursor-pointer rounded-lg" :class="{'bg-green-600/20 border-2 border-green-700 hover:bg-green-600/30 opacity-70': task.attributes.done, 'bg-third/20 border-2 border-third/40 hover:border-third': task.attributes.done == false}">
+								<div class="flex gap-2">
+									<button v-if="task.attributes.done" @click="markdone($event, task.attributes.done)" class="donemark h-6 min-w-6 bg-green-500/30 p-1 rounded-full border-2 border-green-800/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+									<button v-else  @click="markdone($event, task.attributes.done)" class="donemark h-6 min-w-6 bg-first/60 p-1 rounded-full border-2 border-third/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+									<p class="text-sm">{{ task.attributes.title }}</p>
+									
+								</div>
+								<div class="absolute left-2 bottom-2">
+									<p class="text-xs px-1.5 py-0.5 rounded-md border-2" :class="{'bg-blue-500/40': task.attributes.priority=='normal', 'border-blue-500': task.attributes.priority=='normal', 'bg-green-500/40': task.attributes.priority=='none', 'border-green-500/40': task.attributes.priority=='none', 'bg-red-500/40': task.attributes.priority=='important', 'border-red-500/40': task.attributes.priority=='important'}" >{{ task.attributes.priority }}</p>
+								</div>
+								<div class="absolute right-2 bottom-2 flex gap-1">
+									<p v-for="usr in task.attributes.users.data"  class="text-[0.5rem] px-1.5 py-0.5 rounded-md bg-white/20 border-2" >{{ usr.attributes.username }}</p>
+								</div>
+							</section>
+						</template>
+						<template #footer>
+							<button @click="newTask" title="New task" class="flex opacity-70 gap-2 items-center justify-center w-full py-2 hover:bg-second/30 rounded-xl">
+								<img class="h-4 w-4 opacity-70" src="/icons/plus.svg" alt="+">
+								<p class="text-sm">Add task</p>
+							</button>
+						</template>
+				</draggable>
 			</section>
 			<div class="min-w-96 max-w-96 h-5/6 py-4 px-4">
 				<button @click="newBoard" class="flex justify-start w-full gap-4 mb-2 px-2 hover:bg-first py-2 rounded-xl">
@@ -76,12 +96,69 @@
 
 <script lang="ts" setup>
 const { org, project } = useRoute().params;
+import draggable from 'vuedraggable'
 
 const router = useRouter()
 
 let orgid = ref()
 let projectdata: any[] = []
 let boardsdata: any[] = []
+
+let taskToMove = ref()
+let BoardFrom = ref()
+let BoardTo = ref()
+
+
+let end = (evt) => {
+	BoardFrom.value = evt.from.getAttribute('data-boardid')
+	BoardTo.value = evt.to.getAttribute('data-boardid')
+
+	console.log(BoardFrom.value, BoardTo.value)
+
+	if (BoardFrom.value != BoardTo.value) {
+		const { data: deltask} = useFetch(
+		`http://strapi.denalify.com/api/tasks/${taskToMove.value.id}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			}
+		})
+		movedtask()
+	}
+
+}
+
+
+let change = (evt) => {
+	if (evt.added?.element.attributes) {
+		taskToMove.value = evt.added?.element
+		console.log(taskToMove.value)
+	}
+}
+
+let movedtask = () => {
+	const { data: createtast} = useFetch(
+		`http://strapi.denalify.com/api/tasks`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+			body:{
+				data: {
+					title: taskToMove.value.attributes.title,
+					done: taskToMove.value.attributes.done,
+					end: taskToMove.value.attributes.end,
+					priority: taskToMove.value.attributes.priority,
+					content: taskToMove.value.attributes.content,
+					board: BoardTo.value
+				}
+			}
+		}
+	)
+
+	router.go(0)
+}
+
 
 const { data: organization } = await useFetch(
 	`http://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
@@ -96,11 +173,11 @@ const { data: findProject } = await useFetch(
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
+		
 }) 
 
 
-
-const { data: pro } = await useFetch(
+const { data: pro, refresh: refpro } = await useFetch(
 	`http://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -109,8 +186,8 @@ const { data: pro } = await useFetch(
 projectdata = pro.value.data.attributes
 
 for (const board in projectdata.boards.data) {
-	const { data: boards, refresh: reloadboards } = await useFetch(
-	`http://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=*`, {
+	const { data: boards } = await useFetch(
+	`http://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -121,6 +198,7 @@ for (const board in projectdata.boards.data) {
 
 }
 
+console.log(boardsdata)
 
 let newBoardPopup = ref(false);
 let newBoard = () => {
@@ -149,9 +227,29 @@ let newTask = (e) => {
 let seeTaskPopup = ref(false)
 let taskid = ref()
 let seeTask = (e) => {
+	if (e.target != e.target.closest('.donemark')) {
+		taskid.value = e.target.closest('section').getAttribute('data-taskid')
+		seeTaskPopup.value = true
+	}
+}
+
+
+let markdone = (e, done) => {
 	taskid.value = e.target.closest('section').getAttribute('data-taskid')
-	console.log(taskid.value)
-	seeTaskPopup.value = true
+
+	const changetaskdone = useFetch(`http://strapi.denalify.com/api/tasks/${taskid.value}`, {
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: {
+			data: {
+				done: !done
+			}
+		}
+	});
+
+	router.go(0)
 }
 	
 </script>
