@@ -18,7 +18,7 @@
 						<label for="date" class="block mb-2 text-sm font-medium text-white">Deadline</label>
 						<div class="relative mb-6">
 							<div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-								<i class='bx bxs-cube bx-xs text-gray-500'></i>
+								<i class='bx bxs-calendar-alt bx-xs text-gray-500'></i>
 							</div>
 							<input v-model="date" type="date" id="date" class="bg-white/20 border border-white/60 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="New task">
 						</div>

@@ -161,7 +161,7 @@ let loginEmail = async () => {
 		}, 8000);
 
 		} else{
-			success.value = 'Now you can login'
+			success.value = 'Check your email inbox to confirm account'
 		}
 	}
 

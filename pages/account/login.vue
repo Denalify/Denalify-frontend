@@ -46,6 +46,9 @@
 			<div class="mt-8 border-t border-third py-2 text-white/70">
 				<p><NuxtLink to="/account/register" class="underline">Register</NuxtLink> if you don't have account</p>
 			</div>
+			<div class="py-2 text-white/70">
+				<p><NuxtLink to="/account/forgot-password" class="underline">Forgot password</NuxtLink>?</p>
+			</div>
 		</div>
 
 	</div>

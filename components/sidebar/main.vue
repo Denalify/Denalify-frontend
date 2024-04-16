@@ -17,19 +17,19 @@
 							<div v-for="org in orgs" :data-orgid="org.id"  class="organization mt-3 bg-first/70 py-2 px-2 rounded-xl duration-150">
 								
 								<button @click="toggleOrg" class="w-full flex items-center gap-4">
-									<p>{{ org.name }}</p>
+									<p>{{ org.attributes.name }}</p>
 									<NuxtImg src="/icons/caret-down.svg" alt="\/" class="h-4 w-4 arrow duration-150 -rotate-90" />
 								</button>
 								<div class="projects mt-2 flex flex-col gap-0.5 hidden">
 
-									<NuxtLink :to="'/'+org.name+'/'+pro.slug" v-for="pro in org.pojects"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
-										<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.color"></div>
-										<p>{{pro.nazwa}}</p>
+									<NuxtLink :to="'/'+org.attributes.name+'/'+pro.attributes.slug" v-for="pro in org.attributes.pojects.data"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
+										<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
+										<p>{{pro.attributes.nazwa}}</p>
 									</NuxtLink>
 
 
-									<button @click="craeteProject"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30 opacity-70">
-										<div class="relative w-6 h-6 rounded-md bg-primary" ></div>
+									<button @click="craeteProject"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30 opacity-60">
+										<div class="relative w-6 h-6 rounded-md bg-slate-600/70" ></div>
 										<p>Add project</p>
 									</button>
 								</div>
@@ -75,13 +75,15 @@ const logoutButton = () => {
 
 let orgs: any[] = []
 
-const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?populate=organizations&populate=avatar&populate=admin_in_organizations&populate=comments&populate[organizations][populate]=*', {
+const {data} = await useFetch('http://strapi.denalify.com/api/organizations?populate[0]=pojects', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
 })
 
-orgs = user.value.organizations
+orgs = data.value.data
+
+console.log(orgs)
 
 
 let createOrg = ref(false)
