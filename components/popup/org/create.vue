@@ -48,13 +48,13 @@ let logo = ref()
 
 let createOrg = () => {
 
-	const usr = useFetch(`http://strapi.denalify.com/api/users/me?fields[0]=id`, {
+	const usr = useFetch(`https://strapi.denalify.com/api/users/me?fields[0]=id`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 	})
 
-	const imageupload = useFetch(`http://strapi.denalify.com/api/upload`, {
+	const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -67,7 +67,7 @@ let createOrg = () => {
 	}
 
 	const newOrg = useFetch(
-	`http://strapi.denalify.com/api/organizations`, {
+	`https://strapi.denalify.com/api/organizations`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

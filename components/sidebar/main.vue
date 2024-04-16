@@ -75,7 +75,7 @@ const logoutButton = () => {
 
 let orgs: any[] = []
 
-const {data} = await useFetch('http://strapi.denalify.com/api/organizations?populate[0]=pojects', {
+const {data} = await useFetch('https://strapi.denalify.com/api/organizations?populate[0]=pojects', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},

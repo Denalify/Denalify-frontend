@@ -39,7 +39,7 @@
   let editsection = () => {
 
 	  const newBoard = useFetch(
-	  `http://strapi.denalify.com/api/boards/${props.sectionid}`, {
+	  `https://strapi.denalify.com/api/boards/${props.sectionid}`, {
 		  method: 'PUT',
 		  headers: {
 			  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

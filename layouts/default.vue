@@ -10,7 +10,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me', {
+const {data: user} = await useFetch('https://strapi.denalify.com/api/users/me', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},

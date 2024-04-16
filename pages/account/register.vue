@@ -137,7 +137,7 @@ let loginEmail = async () => {
 		};
 
 
-		const register = await fetch(`http://strapi.denalify.com/api/auth/local/register`, {
+		const register = await fetch(`https://strapi.denalify.com/api/auth/local/register`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

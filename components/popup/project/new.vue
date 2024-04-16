@@ -69,7 +69,7 @@ let createSection = () => {
 	console.log(slug)
 
 	const newBoard = useFetch(
-	`http://strapi.denalify.com/api/pojects`, {
+	`https://strapi.denalify.com/api/pojects`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

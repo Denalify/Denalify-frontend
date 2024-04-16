@@ -13,7 +13,7 @@
 				<div class="w-full h-full bg-first/50 rounded-3xl p-6">
 					<div class="flex flex-wrap gap-6">
 						<div>
-							<img v-if="orgs.data.attributes.logo.data" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-contain" :src="'http://strapi.denalify.com'+ orgs.data.attributes.logo.data.attributes.url" alt="">
+							<img v-if="orgs.data.attributes.logo.data" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-contain" :src="'https://strapi.denalify.com'+ orgs.data.attributes.logo.data.attributes.url" alt="">
 							<div v-else  class="h-36 w-36 bg-slate-600 rounded-2xl"></div>
 						</div>
 						<div>
@@ -64,7 +64,7 @@ const { org } = useRoute().params;
 
 let leaveorg = ref(false)
 
-const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?populate=*', {
+const {data: user} = await useFetch('https://strapi.denalify.com/api/users/me?populate=*', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -72,14 +72,14 @@ const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?pop
 
 
 const { data: organization } = await useFetch(
-	`http://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&fields[0]=id`, {
+	`https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&fields[0]=id`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 }) 
 
 
-const {data: orgs} = await useFetch(`http://strapi.denalify.com/api/organizations/${organization.value.data[0].id}?populate=*`, {
+const {data: orgs} = await useFetch(`https://strapi.denalify.com/api/organizations/${organization.value.data[0].id}?populate=*`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -110,7 +110,7 @@ let isadmin = ref(false)
 // }
 
 // let destroyOrg = async () => {
-// 	const data = await useFetch(`http://strapi.denalify.com/api/organization/${orgs.value.data.id}`, {
+// 	const data = await useFetch(`https://strapi.denalify.com/api/organization/${orgs.value.data.id}`, {
 // 		method: 'DETELE',
 // 		headers: {
 // 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

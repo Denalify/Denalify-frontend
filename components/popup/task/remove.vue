@@ -30,7 +30,7 @@
   let removetask = () => {
 
 	  const remtask = useFetch(
-	  `http://strapi.denalify.com/api/tasks/${props.taskid}`, {
+	  `https://strapi.denalify.com/api/tasks/${props.taskid}`, {
 		  method: 'DELETE',
 		  headers: {
 			  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

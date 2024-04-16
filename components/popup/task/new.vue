@@ -65,7 +65,7 @@ let users = ref()
 
 let selectendUsers = ref([])
 
-const {data: org} = await useFetch(`http://strapi.denalify.com/api/organizations/${props.orgid}?populate=*`, {
+const {data: org} = await useFetch(`https://strapi.denalify.com/api/organizations/${props.orgid}?populate=*`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -82,7 +82,7 @@ let createTask = () => {
 	
 	console.log(selectendUsers.value)
 	const newBoard = useFetch(
-		`http://strapi.denalify.com/api/tasks`, {
+		`https://strapi.denalify.com/api/tasks`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

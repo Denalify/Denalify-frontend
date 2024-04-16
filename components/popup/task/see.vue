@@ -22,7 +22,7 @@
 								<span class="text-white/80" v-if="task.users.data.length == 0" >None</span>
 								<div v-else class="flex">
 									<div v-for="usr in task.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
-										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'http://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
+										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'https://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
 										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
 									</div>
 								</div>
@@ -109,7 +109,7 @@
 					<div class="py-2 flex flex-col gap-6">
 						<div v-for="com in comments.data" class="w-full flex gap-3">
 							<div>
-								<img v-if="com.attributes.user.data.attributes.avatar.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'http://strapi.denalify.com'+com.attributes.user.data.attributes.avatar.data.attributes.url" alt="">
+								<img v-if="com.attributes.user.data.attributes.avatar.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+com.attributes.user.data.attributes.avatar.data.attributes.url" alt="">
 								<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">{{ com.attributes.user.data.attributes.firstname[0].toUpperCase() }}{{ com.attributes.user.data.attributes.lastname[0].toUpperCase() }}</div>
 							</div>
 							<div class="w-full">
@@ -129,7 +129,7 @@
 
 				  <div class="bg-background border-2 border-first w-5/12 max-w-[40vw] min-w-96 h-fit fixed bottom-0 right-0 flex gap-4 px-4">
 					<div class="pt-6">
-						<img v-if="user.avatar" class="w-10 h-8 rounded-full object-cover border border-third" :src="'http://strapi.denalify.com'+user.avatar.url" alt="">
+						<img v-if="user.avatar" class="w-10 h-8 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+user.avatar.url" alt="">
 						<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">{{ user.firstname[0].toUpperCase() }}{{ user.lastname[0].toUpperCase() }}</div>
 					</div>
 					<div class="py-4 w-full">
@@ -183,7 +183,7 @@ let users = ref();
 
 let task = ref();
 
-const {data: user} = await useFetch(`http://strapi.denalify.com/api/users/me?populate=*`, {
+const {data: user} = await useFetch(`https://strapi.denalify.com/api/users/me?populate=*`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -191,7 +191,7 @@ const {data: user} = await useFetch(`http://strapi.denalify.com/api/users/me?pop
 
 
 
-const {data: tasks} = await useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}?populate=board&populate=comments&populate=users&populate[users][populate]=avatar`, {
+const {data: tasks} = await useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}?populate=board&populate=comments&populate=users&populate[users][populate]=avatar`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -201,7 +201,7 @@ task.value = tasks.value.data.attributes;
 
 
 
-const {data: comments} = await useFetch(`http://strapi.denalify.com/api/comments?populate[0]=user&populate[1]=task&populate[2]=user.avatar&filters[task][id][$eq]=${props.taskid}&sort=createdAt`, {
+const {data: comments} = await useFetch(`https://strapi.denalify.com/api/comments?populate[0]=user&populate[1]=task&populate[2]=user.avatar&filters[task][id][$eq]=${props.taskid}&sort=createdAt`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -221,7 +221,7 @@ let desc = new Editor({
 	onBlur({ editor, event }) {
     	 console.log(editor.getHTML())
 		 if (editor.getHTML() != task.value.content) {
-			const tasked = useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}`, {
+			const tasked = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}`, {
 				method: 'PUT',
 				headers: {
 					Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -248,7 +248,7 @@ let commentEditor = new Editor({
 
 let sendComment = () => {
 	if (commentEditor.isEmpty == false) {
-			const newComment = useFetch(`http://strapi.denalify.com/api/comments`, {
+			const newComment = useFetch(`https://strapi.denalify.com/api/comments`, {
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -270,7 +270,7 @@ let sendComment = () => {
 
 let markdone = (done) => {
 
-	const changetaskdone = useFetch(`http://strapi.denalify.com/api/tasks/${props.taskid}`, {
+	const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}`, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

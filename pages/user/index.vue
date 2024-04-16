@@ -12,7 +12,7 @@
 			<div class="w-full h-full bg-first/50 rounded-3xl p-6">
 				<div class="flex flex-wrap gap-6">
 					<div>
-						<img v-if="user.avatar" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-cover" :src="'http://strapi.denalify.com'+ user.avatar.formats.thumbnail.url" alt="">
+						<img v-if="user.avatar" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-cover" :src="'https://strapi.denalify.com'+ user.avatar.formats.thumbnail.url" alt="">
 						<div v-else  class="h-36 w-36 bg-slate-600 rounded-2xl flex justify-center items-center text-5xl">{{ user.firstname[0] }}{{ user.lastname[0] }}</div>
 					</div>
 					<div>
@@ -26,7 +26,7 @@
 					<h4>Yours organizations:</h4>
 					<div v-if="orgs.length > 0" class="flex flex-wrap gap-2 mt-2">
 						<NuxtLink :to="'/'+org.attributes.name" v-for="org in orgs" class="p-2 bg-second/30 rounded-xl border-2 border-second">
-							<img v-if="org.attributes.logo.data" class="rounded-xl w-28 h-28 object-contain" :src="'http://strapi.denalify.com'+org.attributes.logo.data.attributes.url" alt="logo">
+							<img v-if="org.attributes.logo.data" class="rounded-xl w-28 h-28 object-contain" :src="'https://strapi.denalify.com'+org.attributes.logo.data.attributes.url" alt="logo">
 							<div v-else class="h-28 w-28 bg-gray-500 rounded-xl"></div>
 							<p class="mt-1 text-slate-200">{{ org.attributes.name }}</p>
 						</NuxtLink>
@@ -49,7 +49,7 @@
 								<h4>Discord</h4>
 							</div>
 							<div>
-								<NuxtLink to="http://strapi.denalify.com/api/connect/discord" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
+								<NuxtLink to="https://strapi.denalify.com/api/connect/discord" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
 							</div>
 						</div>
 						<div class="w-full flex justify-between items-center px-8 py-4 hover:bg-second/30">
@@ -57,7 +57,7 @@
 								<h4>Github</h4>
 							</div>
 							<div>
-								<NuxtLink to="http://strapi.denalify.com/api/connect/github" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
+								<NuxtLink to="https://strapi.denalify.com/api/connect/github" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
 							</div>
 						</div>
 						<div class="w-full flex justify-between items-center px-8 py-4 hover:bg-second/30">
@@ -65,7 +65,7 @@
 								<h4>Google</h4>
 							</div>
 							<div>
-								<NuxtLink to="http://strapi.denalify.com/api/connect/google" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
+								<NuxtLink to="https://strapi.denalify.com/api/connect/google" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
 							</div>
 						</div>
 					</div>
@@ -84,14 +84,14 @@
 
 let orgs = []
 
-const {data: user} = await useFetch('http://strapi.denalify.com/api/users/me?populate=*', {
+const {data: user} = await useFetch('https://strapi.denalify.com/api/users/me?populate=*', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
 })
 
 
-const {data: use} = await useFetch('http://strapi.denalify.com/api/users/me?populate=organizations,5', {
+const {data: use} = await useFetch('https://strapi.denalify.com/api/users/me?populate=organizations,5', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -100,7 +100,7 @@ const {data: use} = await useFetch('http://strapi.denalify.com/api/users/me?popu
 console.log(use)
 
 for (const or in user.value.organizations) {
-	const {data} = await useFetch(`http://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=*`, {
+	const {data} = await useFetch(`https://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=*`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},

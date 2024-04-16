@@ -71,7 +71,7 @@
 								</div>
 								<div class="absolute right-4 bottom-2 flex">
 									<div v-for="usr in task.attributes.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
-										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'http://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
+										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'https://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
 										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
 									</div>
 								</div>
@@ -122,7 +122,7 @@ let end = (evt) => {
 
 	if (BoardFrom.value != BoardTo.value) {
 		const { data: deltask} = useFetch(
-		`http://strapi.denalify.com/api/tasks/${taskToMove.value.id}`, {
+		`https://strapi.denalify.com/api/tasks/${taskToMove.value.id}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -143,7 +143,7 @@ let change = (evt) => {
 
 let movedtask = () => {
 	const { data: createtast} = useFetch(
-		`http://strapi.denalify.com/api/tasks`, {
+		`https://strapi.denalify.com/api/tasks`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
@@ -166,7 +166,7 @@ let movedtask = () => {
 
 
 const { data: organization } = await useFetch(
-	`http://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
+	`https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -174,7 +174,7 @@ const { data: organization } = await useFetch(
 orgid.value = organization.value.data[0].id
 
 const { data: findProject } = await useFetch(
-	`http://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
+	`https://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -183,7 +183,7 @@ const { data: findProject } = await useFetch(
 
 
 const { data: pro, refresh: refpro } = await useFetch(
-	`http://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
+	`https://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -192,7 +192,7 @@ projectdata = pro.value.data.attributes
 
 for (const board in projectdata.boards.data) {
 	const { data: boards } = await useFetch(
-	`http://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
+	`https://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -250,7 +250,7 @@ let removetask = () => {
 let markdone = (e, done) => {
 	taskid.value = e.target.closest('section').getAttribute('data-taskid')
 
-	const changetaskdone = useFetch(`http://strapi.denalify.com/api/tasks/${taskid.value}`, {
+	const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${taskid.value}`, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

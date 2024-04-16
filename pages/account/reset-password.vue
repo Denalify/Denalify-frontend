@@ -58,7 +58,7 @@ let remindPass = async () => {
     };
 
 
-    const login = await fetch(`http://strapi.denalify.com/api/auth/reset-password`, {
+    const login = await fetch(`https://strapi.denalify.com/api/auth/reset-password`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

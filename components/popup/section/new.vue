@@ -38,7 +38,7 @@ let name = ref()
 
 let createSection = () => {
 	const newBoard = useFetch(
-	`http://strapi.denalify.com/api/boards`, {
+	`https://strapi.denalify.com/api/boards`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
