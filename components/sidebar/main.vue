@@ -29,17 +29,11 @@
 										</div>
 									</NuxtLink>
 
-
-
 									<button @click="craeteProject"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30 opacity-60">
 										<div class="relative w-6 h-6 rounded-md bg-slate-600/70" ></div>
 										<p>Add project</p>
 									</button>
 
-									<p>testr</p>
-									<p>testr</p>
-									<p>testr</p>
-									<p>testr</p>
 								</div>
 							</div>
 						
