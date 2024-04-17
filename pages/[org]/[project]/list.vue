@@ -39,7 +39,7 @@
 				<table class="w-full">
 					<tr>
 						<td class="w-36 px-2">Priority</td>
-						<td class="w-[40rem] px-2">Nazwa</td>
+						<td class="w-[40rem] px-2">Title</td>
 						<td class="w-36">Users assigned</td>
 						<td>Deadline</td>
 					</tr>
