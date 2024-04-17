@@ -1,5 +1,8 @@
 <template>
   <div class="text-white h-full flex flex-col">
+
+	<PopupOrgJoin v-if="joinOrgPopup" @closeclicked="joinOrgPopup = false" />
+
 	<div class="w-full px-4 py-8 flex justify-between border-b-2 border-first">
 		<h2>Your profile</h2>
 		<div>
@@ -22,17 +25,29 @@
 						<p>Number of tasks: {{ user.tasks.length }}</p>
 					</div>
 				</div>
-				<div class="mt-6">
+				<div class="mt-6 ">
 					<h4>Yours organizations:</h4>
-					<div v-if="orgs.length > 0" class="flex flex-wrap gap-2 mt-2">
-						<NuxtLink :to="'/'+org.attributes.name" v-for="org in orgs" class="p-2 bg-second/30 rounded-xl border-2 border-second">
-							<img v-if="org.attributes.logo.data" class="rounded-xl w-28 h-28 object-contain" :src="'https://strapi.denalify.com'+org.attributes.logo.data.attributes.url" alt="logo">
+					<div v-if="orgs.length > 0" class="flex flex-col gap-2 mt-2 h-full">
+						<NuxtLink :to="'/'+org.attributes.name" v-for="org in orgs" class="p-2 bg-second/30 rounded-xl border-2 border-second flex gap-3">
+							<img v-if="org.attributes.logo.data" class="rounded-xl w-14 h-14 object-contain" :src="'https://strapi.denalify.com'+org.attributes.logo.data.attributes.url" alt="logo">
 							<div v-else class="h-28 w-28 bg-gray-500 rounded-xl"></div>
-							<p class="mt-1 text-slate-200">{{ org.attributes.name }}</p>
+							<div>
+								<p class="mt-1 text-slate-200">{{ org.attributes.name }}</p>
+								<p class="text-slate-200">Users: {{ org.attributes.users.data.length }}</p>
+							</div>
+		
 						</NuxtLink>
+						<button @click="joinOrg" class="py-2 h-fit flex gap-3 justify-center items-center bg-second/30 rounded-xl border-2 border-second">
+							<img class="h-5 w-5" src="/icons/plus.svg" alt="+">
+							<p class="mt-1 text-xl text-slate-200">Join</p>
+						</button>
 					</div>
 					<div v-else>
 						<p class="text-white/60">Hey.. You don't have any organization</p>
+						<button @click="joinOrg" class="w-full py-2 h-fit flex gap-3 justify-center items-center bg-second/30 rounded-xl border-2 border-second">
+							<img class="h-5 w-5" src="/icons/plus.svg" alt="+">
+							<p class="mt-1 text-xl text-slate-200">Join</p>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -91,16 +106,8 @@ const {data: user} = await useFetch('https://strapi.denalify.com/api/users/me?po
 })
 
 
-const {data: use} = await useFetch('https://strapi.denalify.com/api/users/me?populate=organizations,5', {
-	headers: {
-		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	},
-})
-
-console.log(use)
-
 for (const or in user.value.organizations) {
-	const {data} = await useFetch(`https://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=logo`, {
+	const {data} = await useFetch(`https://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=logo&populate=users`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
@@ -108,4 +115,9 @@ for (const or in user.value.organizations) {
 	orgs.push(data.value.data)
 }
 
+
+let joinOrgPopup = ref(false)
+let joinOrg = () => {
+	joinOrgPopup.value = true
+}
 </script>

@@ -79,7 +79,8 @@ let createOrg = () => {
 				tasks: null,
 				users: usr.data.value.id,
 				admin_users: usr.data.value.id,
-				logo: logo.value
+				logo: logo.value,
+				inviteCode: btoa(name.value)
 			}
 		}
 	})
