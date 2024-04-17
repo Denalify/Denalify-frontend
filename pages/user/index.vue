@@ -100,7 +100,7 @@ const {data: use} = await useFetch('https://strapi.denalify.com/api/users/me?pop
 console.log(use)
 
 for (const or in user.value.organizations) {
-	const {data} = await useFetch(`https://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=*`, {
+	const {data} = await useFetch(`https://strapi.denalify.com/api/organizations/${user.value.organizations[or].id}?populate=logo`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},

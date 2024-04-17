@@ -22,10 +22,13 @@
 								</button>
 								<div class="projects mt-2 flex flex-col gap-0.5 hidden">
 
-									<NuxtLink :to="'/'+org.attributes.name+'/'+pro.attributes.slug" v-for="pro in org.attributes.pojects.data"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
-										<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
-										<p>{{pro.attributes.nazwa}}</p>
+									<NuxtLink v-for="pro in org.attributes.pojects.data" :to="'/'+org.attributes.name+'/'+pro.attributes.slug"  class="w-full px-2 py-2 rounded-lg hover:bg-third/30">
+										<div class="flex gap-3">
+											<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
+											<p>{{pro.attributes.nazwa}}</p>
+										</div>
 									</NuxtLink>
+
 
 
 									<button @click="craeteProject"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30 opacity-60">
@@ -75,7 +78,13 @@ const logoutButton = () => {
 
 let orgs: any[] = []
 
-const {data} = await useFetch('https://strapi.denalify.com/api/organizations?populate[0]=pojects', {
+const {data:me} = await useFetch('https://strapi.denalify.com/api/users/me', {
+	headers: {
+		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	},
+})
+
+const {data} = await useFetch('https://strapi.denalify.com/api/organizations?populate[0]=pojects&populate[pojects][populate]=users', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
@@ -84,6 +93,25 @@ const {data} = await useFetch('https://strapi.denalify.com/api/organizations?pop
 orgs = data.value.data
 
 console.log(orgs)
+const {data: projects} = await useFetch('https://strapi.denalify.com/api/pojects?populate[0]=organization', {
+	headers: {
+		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	},
+})
+
+
+// for(const org in orgs){
+
+// 	orgs[org].attributes.pojects = []
+
+// 	for (const project in projects.value.data) {
+// 		orgs[org].attributes.pojects += JSON.parse(projects.value.data[project])
+// 	}
+
+// 	console.log(orgs[org].attributes)
+// }
+
+
 
 
 let createOrg = ref(false)
