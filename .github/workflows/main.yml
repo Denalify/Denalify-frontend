@@ -19,7 +19,7 @@ jobs:
         npm run build
     
     - name: Directory Permissions
-      run: chmod -R 775 storage
+      run: chmod -R 775 /
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
