@@ -1,5 +1,5 @@
 <template>
-  	<div class="text-white h-full w-full">
+  	<div class="text-white h-full w-full flex flex-col">
 
 		<PopupSectionNew v-if="newBoardPopup" :projectid="findProject.data[0].id" @closeclicked="newBoardPopup = false" />
 		<PopupSectionEdit v-if="editBoardPopup" :sectionid="sectionid"  @closeclicked="editBoardPopup = false" />
@@ -10,29 +10,32 @@
 		<PopupTaskRemove v-if="removeTaskPopup" :taskid="taskid" @closeclicked="removeTaskPopup = false" />
 
 
-		<div class="w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col justify-between">
+		
+		<div class="text-white w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col gap-2 justify-between">
 			<div>
 				<div class="flex items-center gap-3">
 					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
 					<h3>{{ projectdata.nazwa }}</h3>
 				</div>
 			</div>
-			<div class="flex items-end">
-				<button class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
+			<div class="flex items-end projectNav">
+				<NuxtLink :to="'/'+org+'/'+project+'/list'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
 					<img class="h-6 w-6" src="/icons/list-dashes.svg" alt="">
 					<p>List</p>
-				</button>
-				<button class="flex items-center gap-2 px-5 py-2 rounded-t-xl bg-second">
+				</NuxtLink>
+				<NuxtLink :to="'/'+org+'/'+project+'/board'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
 					<img class="h-6 w-6" src="/icons/columns.svg" alt="">
 					<p>Board</p>
-				</button>
-				<button class="flex items-center gap-2 px-5 py-2 rounded-t-xl ">
+				</NuxtLink>
+				<NuxtLink class="flex items-center gap-2 px-5 py-2 rounded-t-xl opacity-15">
 					<img class="h-6 w-6" src="/icons/calendar.svg" alt="">
 					<p>Calendar</p>
-				</button>
+				</NuxtLink>
 			</div>
 		</div>
-		<div class="projects h-[calc(100%-7rem)] flex flex-nowrap overflow-x-auto">
+
+
+		<div class="projects h-full flex flex-nowrap overflow-x-auto">
 			<section v-for="board in boardsdata" :data-sectionid="board.value.data.id"  class="sectionid min-w-96 h-5/6 pt-6 px-4">
 				<div class="flex justify-between mb-4 px-2">
 					<p class="text-white/70">{{ board.value.data.attributes.title }}</p>
@@ -100,10 +103,16 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  	layout: 'project'
+})
+
+
 const { org, project } = useRoute().params;
 import draggable from 'vuedraggable'
 
 const router = useRouter()
+
 
 let orgid = ref()
 let projectdata: any[] = []

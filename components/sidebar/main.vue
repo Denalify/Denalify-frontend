@@ -22,7 +22,7 @@
 								</button>
 								<div class="projects mt-2 flex flex-col gap-0.5 hidden">
 
-									<NuxtLink v-for="pro in org.attributes.pojects.data" :to="'/'+org.attributes.name+'/'+pro.attributes.slug"  class="w-full px-2 py-2 rounded-lg hover:bg-third/30">
+									<NuxtLink v-for="pro in org.attributes.pojects.data" :to="'/'+org.attributes.name+'/'+pro.attributes.slug+'/board'"  class="w-full px-2 py-2 rounded-lg hover:bg-third/30">
 										<div class="flex gap-3">
 											<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
 											<p>{{pro.attributes.nazwa}}</p>
@@ -91,7 +91,7 @@ const {data} = await useFetch('https://strapi.denalify.com/api/organizations?pop
 
 orgs = data.value.data
 
-console.log(orgs)
+
 const {data: projects} = await useFetch('https://strapi.denalify.com/api/pojects?populate[0]=organization', {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,

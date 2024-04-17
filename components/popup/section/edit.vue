@@ -19,40 +19,42 @@
 
 					<button @click="editsection"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Save</button>
 				</div>
+
+				{{ section }}
 			</div>
 			
 
 
 		</div>
 	</div>
-  </template>
+</template>
   
-  <script lang="ts" setup>
-  const props = defineProps(['sectionid']);
-  const emit = defineEmits(['closeclicked'])
-  
-  const router = useRouter()
-  
-  
-  let name = ref()
-  
-  let editsection = () => {
+<script lang="ts" setup>
+const props = defineProps(['sectionid']);
+const emit = defineEmits(['closeclicked'])
 
-	  const newBoard = useFetch(
-	  `https://strapi.denalify.com/api/boards/${props.sectionid}`, {
-		  method: 'PUT',
-		  headers: {
-			  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		  },
-		  body: {
-			  data: {
-				  title: name.value,
-			  }
-  
-		  }
-  
-	  })
-  
-	  router.go(0)
-  }
+const router = useRouter()
+
+let name = ref()
+
+
+let editsection = () => {
+
+	const newBoard = useFetch(
+	`https://strapi.denalify.com/api/boards/${props.sectionid}`, {
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: {
+			data: {
+				title: name.value,
+			}
+
+		}
+
+	})
+
+	router.go(0)
+}
   </script>

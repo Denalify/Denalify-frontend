@@ -27,6 +27,10 @@ h6{
 }
 
 
+.projectNav .router-link-active{
+	@apply bg-second
+}
+
 .projects::-webkit-scrollbar {
 	height: .6em;
 	width: .6em;

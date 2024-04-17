@@ -1,0 +1,227 @@
+<template>
+	<div class="text-white h-[85%] w-full flex flex-col">
+
+		<PopupSectionNew v-if="newBoardPopup" :projectid="findProject.data[0].id" @closeclicked="newBoardPopup = false" />
+		<PopupSectionEdit v-if="editBoardPopup" :sectionid="sectionid"  @closeclicked="editBoardPopup = false" />
+		<PopupSectionRemove v-if="removeBoardPopup" :sectionid="sectionid"  @closeclicked="removeBoardPopup = false" />
+		<PopupTaskNew v-if="newTaskPopup" :sectionid="sectionid" :orgid="orgid" @closeclicked="newTaskPopup = false"/>
+		<PopupTaskSee v-if="seeTaskPopup" :taskid="taskid" @closeclicked="seeTaskPopup = false"  @edittask="editTask" @removetask="removetask" />
+		<PopupTaskEdit v-if="editTaskPopup" :taskid="taskid" :orgid="orgid" @closeclicked="editTaskPopup = false" />
+		<PopupTaskRemove v-if="removeTaskPopup" :taskid="taskid" @closeclicked="removeTaskPopup = false" />
+
+
+		<div class="text-white w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col gap-2 justify-between">
+			<div>
+				<div class="flex items-center gap-3">
+					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
+					<h3>{{ projectdata.nazwa }}</h3>
+				</div>
+			</div>
+			<div class="flex items-end projectNav">
+				<NuxtLink :to="'/'+org+'/'+project+'/list'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
+					<img class="h-6 w-6" src="/icons/list-dashes.svg" alt="">
+					<p>List</p>
+				</NuxtLink>
+				<NuxtLink :to="'/'+org+'/'+project+'/board'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
+					<img class="h-6 w-6" src="/icons/columns.svg" alt="">
+					<p>Board</p>
+				</NuxtLink>
+				<NuxtLink class="flex items-center gap-2 px-5 py-2 rounded-t-xl opacity-15">
+					<img class="h-6 w-6" src="/icons/calendar.svg" alt="">
+					<p>Calendar</p>
+				</NuxtLink>
+			</div>
+		</div>
+
+		
+		<div class="projects h-full flex flex-col flex-nowrap overflow-x-auto pt-4">
+			<div class="px-4 w-full">
+				<table class="w-full">
+					<tr>
+						<td class="w-36 px-2">Priority</td>
+						<td class="w-[40rem] px-2">Nazwa</td>
+						<td class="w-36">Users assigned</td>
+						<td>Deadline</td>
+					</tr>
+				</table>
+			</div>
+
+
+			<section v-for="board in boardsdata" :data-sectionid="board.value.data.id"  class="sectionid min-w-96 pt-6 px-4">
+				<div class="flex justify-start gap-4 mb-2 px-2">
+					<p class="text-white/70">{{ board.value.data.attributes.title }}</p>
+
+					<div class="flex gap-3">
+						<button @click="newTask" title="New task">
+							<img class="h-4 w-4 opacity-70" src="/icons/plus.svg" alt="">
+						</button>
+						<button @click="editSection" title="Change name">
+							<img class="h-4 w-4 opacity-70" src="/icons/pencil.svg" alt="">
+						</button>
+						<button @click="removeSection" title="Remove section">
+							<img class="h-4 w-4 opacity-70" src="/icons/trash.svg" alt="">
+						</button>
+					</div>
+				</div>
+			
+
+				<table class="w-full border-collapse">
+					<tr 
+						v-for="task in board.value.data.attributes.tasks.data" 
+						@click="seeTask" 
+						:data-taskid="task.id"	
+						class="z-0 w-full duration-200 cursor-pointer" 
+						:class="{'bg-green-600/20 border-y-2 border-green-700 hover:bg-green-600/30 opacity-70': task.attributes.done, 'bg-third/20 border-y-2 border-third/40 hover:bg-third/40': task.attributes.done == false}">
+						<td class="w-36 py-2 pl-1">
+							<p class="text-xs w-fit px-1.5 py-0.5 rounded-md border-2" :class="{'bg-blue-500/40': task.attributes.priority=='normal', 'border-blue-500': task.attributes.priority=='normal', 'bg-green-500/40': task.attributes.priority=='none', 'border-green-500/40': task.attributes.priority=='none', 'bg-red-500/40': task.attributes.priority=='important', 'border-red-500/40': task.attributes.priority=='important'}" >{{ task.attributes.priority }}</p>
+						</td>
+						<td class="w-[40rem]">
+							<div class="flex gap-2">
+								<button v-if="task.attributes.done" @click="markdone($event, task.attributes.done)" class="donemark h-6 min-w-6 bg-green-500/30 p-1 rounded-full border-2 border-green-800/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+								<button v-else  @click="markdone($event, task.attributes.done)" class="donemark h-6 min-w-6 bg-first/60 p-1 rounded-full border-2 border-third/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+								<p class="text-sm">{{ task.attributes.title }}</p>
+							</div>
+						</td>
+						
+						<td class="w-36">
+							<div class="flex">
+								<div v-for="usr in task.attributes.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
+									<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'https://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
+									<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<p class="text-sm">
+								{{ task.attributes.end }}
+							</p>
+						</td>
+					</tr>
+				</table>
+
+			</section>
+			<div class="min-w-96 max-w-96 py-4 px-4">
+				<button @click="newBoard" class="flex justify-start w-full gap-4 mb-2 px-2 hover:bg-first py-2 rounded-xl">
+					<img class="h-6 w-6 opacity-70" src="/icons/plus.svg" alt="">
+					<p class="text-white/70">Create new section</p>
+				</button>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script lang="ts" setup>
+definePageMeta({
+	layout: 'project'
+})
+
+const { org, project } = useRoute().params;
+
+const router = useRouter()
+
+let orgid = ref()
+let projectdata: any[] = []
+let boardsdata: any[] = []
+
+
+const { data: organization } = await useFetch(
+  `https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
+	  headers: {
+		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	  },
+})
+orgid.value = organization.value.data[0].id
+
+const { data: findProject } = await useFetch(
+  `https://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
+	  headers: {
+		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	  },
+	  
+}) 
+
+
+const { data: pro, refresh: refpro } = await useFetch(
+  `https://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
+	  headers: {
+		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	  },
+}) 
+projectdata = pro.value.data.attributes
+
+for (const board in projectdata.boards.data) {
+  const { data: boards } = await useFetch(
+  `https://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
+	  headers: {
+		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	  },
+  })
+  boardsdata.push(boards)
+}
+
+let newBoardPopup = ref(false);
+let newBoard = () => {
+  newBoardPopup.value = true
+}
+let editBoardPopup = ref(false)
+let sectionid = ref('')
+let editSection = (e) => {
+  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
+  editBoardPopup.value = true
+}
+
+let removeBoardPopup = ref(false)
+let removeSection = (e) => {
+  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
+  removeBoardPopup.value = true
+}
+
+let newTaskPopup = ref(false)
+let newTask = (e) => {
+  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
+  newTaskPopup.value = true
+}
+
+
+let seeTaskPopup = ref(false)
+let taskid = ref()
+let seeTask = (e) => {
+  if (e.target != e.target.closest('.donemark')) {
+	  taskid.value = e.target.closest('tr').getAttribute('data-taskid')
+	  seeTaskPopup.value = true
+  }
+}
+
+
+let editTaskPopup = ref(false)
+let editTask = () => {
+  seeTaskPopup.value = false
+  editTaskPopup.value = true
+}
+
+let removeTaskPopup = ref(false)
+let removetask = () => {
+  seeTaskPopup.value = false
+  removeTaskPopup.value = true
+}
+
+
+let markdone = (e, done) => {
+  taskid.value = e.target.closest('tr').getAttribute('data-taskid')
+
+  const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${taskid.value}`, {
+	  method: 'PUT',
+	  headers: {
+		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+	  },
+	  body: {
+		  data: {
+			  done: !done
+		  }
+	  }
+  });
+
+  router.go(0)
+}
+  
+</script>
