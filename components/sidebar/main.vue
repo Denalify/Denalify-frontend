@@ -35,6 +35,8 @@
 										<div class="relative w-6 h-6 rounded-md bg-slate-600/70" ></div>
 										<p>Add project</p>
 									</button>
+
+									<p>test</p>
 								</div>
 							</div>
 						
