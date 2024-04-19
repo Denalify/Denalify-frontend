@@ -2,6 +2,7 @@
   <div class="text-white h-full flex flex-col">
 
 	<PopupOrgJoin v-if="joinOrgPopup" @closeclicked="joinOrgPopup = false" />
+	<PopupProfileEdit v-if="editProfilePopup" :userid="user.id" @closeclicked="editProfilePopup = false" />
 
 	<div class="w-full px-4 py-8 flex justify-between border-b-2 border-first">
 		<h2>Your profile</h2>
@@ -12,15 +13,19 @@
 
 	<div class="flex w-full h-full">
 		<div class="w-full h-full p-12">
-			<div class="w-full h-full bg-first/50 rounded-3xl p-6">
+			<div class="w-full h-full bg-first/50 rounded-3xl p-6 relative">
+				<button @click="editProfile"  class="bg-green-600 hover:bg-green-600/60 duration-100 px-3 py-1.5 rounded-lg absolute right-3 top-3"><img class="h-4 w-4" src="/icons/pencil.svg" alt=""></button>
 				<div class="flex flex-wrap gap-6">
 					<div>
 						<img v-if="user.avatar" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-cover" :src="'https://strapi.denalify.com'+ user.avatar.formats.thumbnail.url" alt="">
-						<div v-else  class="h-36 w-36 bg-slate-600 rounded-2xl flex justify-center items-center text-5xl">{{ user.firstname[0] }}{{ user.lastname[0] }}</div>
+						<div v-else  class="h-36 w-36 bg-slate-600 rounded-2xl flex justify-center items-center text-5xl">
+							<p v-if="user.firstname && user.lastname">{{ user.firstname[0].toUpperCase()+user.lastname[0].toUpperCase() }}</p>
+							<p v-else>{{ user.username[0].toUpperCase() }}</p>
+						</div>
 					</div>
 					<div>
 						<h4>{{ user.username }}</h4>
-						<p>{{ user.firstname }} {{ user.lastname }}</p>
+						<p v-if="user.firstname && user.lastname">{{ user.firstname }} {{ user.lastname }}</p>
 						<p>{{ user.email }}</p>
 						<p>Number of tasks: {{ user.tasks.length }}</p>
 					</div>
@@ -54,36 +59,8 @@
 		</div>
 		<div class="w-2/3 2xl:w-full h-full p-12">
 			<div class="w-full h-full flex flex-col gap-12">
-				<div class="bg-first/50 h-full w-full rounded-3xl">
-					<div class="w-full px-4 py-4 border-b-2 border-first">
-						<h3>Connect</h3>
-					</div>
-					<div class="flex flex-col">
-						<div class="w-full flex justify-between items-center px-8 py-4 hover:bg-second/30">
-							<div>
-								<h4>Discord</h4>
-							</div>
-							<div>
-								<NuxtLink to="https://strapi.denalify.com/api/connect/discord" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
-							</div>
-						</div>
-						<div class="w-full flex justify-between items-center px-8 py-4 hover:bg-second/30">
-							<div>
-								<h4>Github</h4>
-							</div>
-							<div>
-								<NuxtLink to="https://strapi.denalify.com/api/connect/github" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
-							</div>
-						</div>
-						<div class="w-full flex justify-between items-center px-8 py-4 hover:bg-second/30">
-							<div>
-								<h4>Google</h4>
-							</div>
-							<div>
-								<NuxtLink to="https://strapi.denalify.com/api/connect/google" target="_blank" rel="noopener noreferrer"  class="bg-green-600 px-3 py-2 rounded-xl">Connect</NuxtLink>
-							</div>
-						</div>
-					</div>
+				<div class="bg-first/50 h-full w-full rounded-3xl flex justify-center items-center">
+					<p class="animate-pulse">Coming soon...</p>
 				</div>
 				<div class="bg-first/50 h-full w-full rounded-3xl p-6 flex justify-center items-center">
 					<p class="animate-pulse">Coming soon...</p>
@@ -119,5 +96,11 @@ for (const or in user.value.organizations) {
 let joinOrgPopup = ref(false)
 let joinOrg = () => {
 	joinOrgPopup.value = true
+}
+
+
+let editProfilePopup = ref(false)
+let editProfile = () => {
+	editProfilePopup.value = true
 }
 </script>

@@ -37,7 +37,7 @@
 					<div class="mt-6">
 						<h4>Projects:</h4>
 						<div  class="flex flex-wrap gap-2 mt-2">
-							<NuxtLink :to="'/'+orgs.data.attributes.name+'/'+pro.attributes.slug" v-for="pro in orgs.data.attributes.pojects.data"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
+							<NuxtLink :to="'/'+orgs.data.attributes.name+'/'+pro.attributes.slug+'/board'" v-for="pro in orgs.data.attributes.pojects.data"  class="w-full flex gap-3 px-2 py-2 rounded-lg hover:bg-third/30">
 								<div class="relative w-6 h-6 rounded-md" :style="'background-color: '+ pro.attributes.color"></div>
 								<p>{{pro.attributes.nazwa}}</p>
 							</NuxtLink>

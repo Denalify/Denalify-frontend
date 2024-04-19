@@ -23,7 +23,14 @@
 								<div v-else class="flex">
 									<div v-for="usr in task.users.data" class="text-[0.5rem] rounded-full overflow-hidden bg-white/20 border-2 -mr-2">
 										<img v-if="usr.attributes.avatar.data" class="w-6 h-6" :src="'https://strapi.denalify.com'+usr.attributes.avatar.data?.attributes.url" :alt="usr.attributes.firstname[0]+usr.attributes.lastname[0]">
-										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">{{ usr.attributes.firstname[0].toUpperCase() +usr.attributes.lastname[0].toUpperCase() }}</p>
+										<p v-else class="text-sm w-6 h-6 flex justify-center items-center bg-[#765D4B]">
+											<span v-if="usr.attributes.firstname && usr.attributes.lastname">
+												{{ usr.attributes.firstname[0].toUpperCase()+usr.attributes.lastname[0].toUpperCase()}}
+											</span>
+											<span v-else>
+												{{ usr.attributes.username[0].toUpperCase()}}
+											</span>
+										</p>
 									</div>
 								</div>
 							</div>
@@ -102,15 +109,19 @@
 				  <div class="mt-6 pt-4 pb-64 px-4 text-white bg-first/40">
 					<p>Comments</p>
 
-					<!-- <div v-if="comments.meta.pagination.total == 0" class="px-4 text-white/70">
-						<p>there are no comments</p>
-					</div> -->
 
 					<div class="py-2 flex flex-col gap-6">
 						<div v-for="com in comments.data" class="w-full flex gap-3">
 							<div>
-								<img v-if="com.attributes.user.data.attributes.avatar.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+com.attributes.user.data.attributes.avatar.data.attributes.url" alt="">
-								<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">{{ com.attributes.user.data.attributes.firstname[0].toUpperCase() }}{{ com.attributes.user.data.attributes.lastname[0].toUpperCase() }}</div>
+								<img v-if="com.attributes.user.data?.attributes.avatar.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+com.attributes.user.data?.attributes.avatar.data?.attributes.url" alt="">
+								<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">
+									<span v-if="com.attributes.user.data.attributes.firstname && com.attributes.user.data.attributes.lastname">
+										{{ com.attributes.user.data.attributes.firstname[0].toUpperCase()+com.attributes.user.data.attributes.lastname[0].toUpperCase()}}
+									</span>
+									<span v-else>
+										{{ com.attributes.user.data.attributes.username[0].toUpperCase()}}
+									</span>
+								</div>
 							</div>
 							<div class="w-full">
 								<div class="flex items-center gap-2">
@@ -130,7 +141,14 @@
 				  <div class="bg-background border-2 border-first w-5/12 max-w-[40vw] min-w-96 h-fit fixed bottom-0 right-0 flex gap-4 px-4">
 					<div class="pt-6">
 						<img v-if="user.avatar" class="w-10 h-8 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+user.avatar.url" alt="">
-						<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">{{ user.firstname[0].toUpperCase() }}{{ user.lastname[0].toUpperCase() }}</div>
+						<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">
+							<span v-if="user.firstname && user.lastname">
+								{{ user.firstname[0].toUpperCase()+user.lastname[0].toUpperCase()}}
+							</span>
+							<span v-else>
+								{{ user.username[0].toUpperCase()}}
+							</span>
+						</div>
 					</div>
 					<div class="py-4 w-full">
 						<div class="commenteditor relative border-2 min-h-32 rounded-xl border-second">
@@ -263,6 +281,8 @@ let sendComment = () => {
 			});
 
 		console.log(newComment)
+
+		router.go(0)
 	}
 
 }
