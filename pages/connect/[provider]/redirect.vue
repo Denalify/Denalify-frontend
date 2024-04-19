@@ -21,7 +21,6 @@ try {
 
   jwt.value = res.data.value.jwt
 
-  console.log(jwt.value)
 
   if (res.data.value.error) {
 

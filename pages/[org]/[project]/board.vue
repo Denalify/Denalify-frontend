@@ -12,10 +12,13 @@
 
 		
 		<div class="text-white w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col gap-2 justify-between">
-			<div>
+			<div class="flex justify-between">
 				<div class="flex items-center gap-3">
 					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
-					<h3>{{ projectdata.nazwa }}</h3>
+					<div class="flex">
+						<NuxtLink :to="'/'+org" class="text-3xl text-white/80 hover:text-white duration-100">{{ org }}/</NuxtLink>
+						<h3>{{ projectdata.nazwa }}</h3>
+					</div>
 				</div>
 			</div>
 			<div class="flex items-end projectNav">

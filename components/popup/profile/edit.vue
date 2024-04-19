@@ -33,9 +33,14 @@
 						<input v-model="username" type="text" id="username" class="bg-white/20 border border-white/60 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="username">
 					</div>
 				</div>
+
+				<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Avatar</label>
+				<input @change="getFileObject($event)"  class="block w-full bg-white/20 border border-white/60 text-white text-sm cursor-pointer bg-gray-50 focus:outline-none" aria-describedby="file_input_help" id="file_input" type="file">
+				<p class="mt-1 text-sm text-gray-500" id="file_input_help">SVG, PNG, JPG, JPEG, ICO (MAX. 20MB)</p>
+
 				<div class="mt-4 text-white">
 
-					<button @click="editsection"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Save</button>
+					<button @click="editprofile"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Save</button>
 				</div>
 
 			</div>
@@ -55,7 +60,9 @@ const router = useRouter()
 let fname = ref()
 let lname = ref()
 let username = ref()
+let profileAvatar = ''
 
+let formData = new FormData()
 
 
 const user = useFetch(
@@ -66,25 +73,56 @@ const user = useFetch(
 })
 
 
-let editsection = () => {
+setTimeout(() => {
+	let userData = user.data.value
 
-	const edit = $fetch(
+	fname.value = userData.firstname
+	lname.value = userData.lastname
+	username.value = userData.username
+}, 100);
+
+
+let getFileObject = (e: any) => {
+	formData.append('files', e.target.files[0])
+
+
+	const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: formData
+	}).then((res) => {
+		console.log(res.data)
+
+		for (let i = 0; i < res.data.value?.length; i++) {
+			profileAvatar = res.data?.value[i].id
+		}
+	})
+
+}
+
+
+let editprofile = () => {
+
+	console.log("avatar: ",profileAvatar)
+
+	const edit = useFetch(
 	`https://strapi.denalify.com/api/user/me`, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 		body: {
-			
+			avatar: profileAvatar,
 			firstname: fname.value,
 			lastname: lname.value,
 			username: username.value,
-			
-
 		}
 
 	})
 
-	// router.go(0)
+	router.go(0)
+
 }
   </script>

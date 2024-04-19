@@ -47,6 +47,8 @@ let name = ref()
 let color = ref('#f6b73c')
 let slug = ''
 
+
+
 let createSection = () => {
 
 	let preslug = name.value.split(' ')

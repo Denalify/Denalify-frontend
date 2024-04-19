@@ -14,8 +14,13 @@
 			<div>
 				<div class="flex items-center gap-3">
 					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
-					<h3>{{ projectdata.nazwa }}</h3>
+					<div class="flex">
+						<NuxtLink :to="'/'+org" class="text-3xl text-white/80 hover:text-white duration-100">{{ org }}/</NuxtLink>
+						<h3>{{ projectdata.nazwa }}</h3>
+					</div>
 				</div>
+
+				
 			</div>
 			<div class="flex items-end projectNav">
 				<NuxtLink :to="'/'+org+'/'+project+'/list'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
