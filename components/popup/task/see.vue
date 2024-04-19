@@ -125,7 +125,8 @@
 							</div>
 							<div class="w-full">
 								<div class="flex items-center gap-2">
-									<p class="font-semibold">{{ com.attributes.user.data.attributes.firstname }} {{ com.attributes.user.data.attributes.lastname }}</p> 
+									<p v-if="com.attributes.user.data.attributes.firstname && com.attributes.user.data.attributes.lastname" class="font-semibold">{{ com.attributes.user.data.attributes.firstname }} {{ com.attributes.user.data.attributes.lastname }}</p>
+									<p v-else class="font-semibold">{{ com.attributes.user.data.attributes.username }}</p>
 									<span class="text-xs text-white/40">{{ new Date(com.attributes.createdAt).getDate() }}.{{ new Date(com.attributes.createdAt).getMonth()+1 }}.{{ new Date(com.attributes.createdAt).getFullYear() }} {{ new Date(com.attributes.createdAt).getHours() }}:{{ new Date(com.attributes.createdAt).getMinutes() }}</span>
 								</div>
 								<div class="text-sm w-full min-w-full px-0.5 py-0.5 rounded-xl">
