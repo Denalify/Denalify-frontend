@@ -140,9 +140,9 @@
 
 
 				<div class="py-2 flex flex-col gap-6">
-					<div v-for="com in comments.data" class="w-full flex gap-3">
+					<div v-for="com in comments.data" class="w-full flex gap-3 relative">
 						<div>
-							<img v-if="com.attributes.user.data?.attributes.avatar.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+com.attributes.user.data?.attributes.avatar.data?.attributes.url" alt="">
+							<img v-if="com.attributes.user.data?.attributes.avatar?.data"  class="w-10 h-9 rounded-full object-cover border border-third" :src="'https://strapi.denalify.com'+com.attributes.user.data?.attributes.avatar.data?.attributes.url" alt="">
 							<div v-else class="w-8 h-8 bg-gray-700 rounded-full flex justify-center items-center">
 								<span v-if="com.attributes.user.data.attributes.firstname && com.attributes.user.data.attributes.lastname">
 									{{ com.attributes.user.data.attributes.firstname[0].toUpperCase()+com.attributes.user.data.attributes.lastname[0].toUpperCase()}}
@@ -160,9 +160,12 @@
 							</div>
 							<div class="text-sm w-full min-w-full px-0.5 py-0.5 rounded-xl">
 								<div class="tiptap" v-html="com.attributes.content">
-
+									
 								</div>
 							</div>
+						</div>
+						<div v-if="com.attributes.user.data.id == user.id" :data-comid="com.id" class="removecomment absolute right-2 top-2">
+							<button @click="removeComment" class="p-1 rounded-lg bg-red-600/40"><nuxt-img class="h-4 w-4" src="/icons/trash.svg"  alt="X" /></button>
 						</div>
 					</div>
 				</div>
@@ -230,13 +233,15 @@ let users = ref();
 let task = ref();
 let comments = ref();
 
-let newSubtask = ref();
+let newSubtask = ref(); 
 
 const {data: user} = await useFetch(`https://strapi.denalify.com/api/users/me?fields[0]=id&populate[avatar][fields][0]=url`, {
 	headers: {
 		Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 	},
 });
+
+console.log(user)
 
 
 
@@ -290,24 +295,31 @@ let commentEditor = new Editor({
 })
 
 let sendComment = () => {
+
+
 	if (commentEditor.isEmpty == false) {
-			const newComment = useFetch(`https://strapi.denalify.com/api/comments`, {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-				},
-				body: {
-					data: {
-						user:  user.value.id,
-						content: commentEditor.getHTML(),
-						task: props.taskid,
-					}
+		
+
+		const {data: newComment} = useFetch(`https://strapi.denalify.com/api/comments?populate[user][populate][avatar][fields][0]=url`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+			body: {
+				data: {
+					user:  user.value.id,
+					content: commentEditor.getHTML(),
+					task: props.taskid,
 				}
-			});
+			}
+		}).then((res) => {
+			console.log(res.data)
+			console.log(comments.value)
 
-		console.log(newComment)
+			comments.value?.data.push(res.data.value.data)
+		})
 
-		router.go(0)
+
 	}
 
 }
@@ -359,7 +371,7 @@ let createNewSubtask = async () => {
 	console.log(newSubtask.value)
 }
 
-let removeSubtask = async (e) => {
+let removeSubtask = async (e: any) => {
 	let subid = e.target.closest('.subid').getAttribute('data-subid')
 
 	let subtasks = tasks.value.data.attributes.subtask
@@ -387,6 +399,31 @@ let removeSubtask = async (e) => {
 	})
 	
 
+}
+console.log(comments.value)
+
+let removeComment = async (e: any) => {
+	let comid = e.target.closest('.removecomment').getAttribute('data-comid')
+
+
+	let removeFromComments = (value, index, arr) => {
+		if(value.id == comid){ 
+			arr.splice(index, 1);
+			return true
+		}
+		return false
+	}
+
+
+	const x = comments.value.data.filter(removeFromComments)
+
+
+	const remSub = useFetch(`https://strapi.denalify.com/api/comments/${comid}`, {
+		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		}
+	})
 }
 
 </script>
