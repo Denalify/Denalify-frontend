@@ -54,11 +54,11 @@ export default defineNuxtConfig({
 
 	},
 	modules: [
-		'@nuxtjs/tailwindcss', 	  //css framework
-		'@nuxtjs/google-fonts',   //google fonts
+		'@nuxtjs/tailwindcss', 	  		//css framework
+		'@nuxtjs/google-fonts',   		//google fonts
 		'@nuxt/image',				    //images
 		'@nuxtjs/robots',			    //robots
-    	'@nuxtjs/strapi',         // strapi
+    	'@nuxtjs/strapi',         		// strapi
 	],
 
 	tailwindcss: {
@@ -73,14 +73,14 @@ export default defineNuxtConfig({
 		}
 	},
 
-  strapi: {
-	devtools: true,
-    url: 'https://strapi.denalify.com',
-    prefix: '/api',
-    version: 'v4',
-    cookie: {},
-    cookieName: 'strapi_jwt'
-  },
+	strapi: {
+		devtools: true,
+		url: 'https://strapi.denalify.com/graphql',
+		prefix: '/api',
+		version: 'v4',
+		cookie: {},
+		cookieName: 'strapi_jwt'
+	},
 
 
 	css: [
