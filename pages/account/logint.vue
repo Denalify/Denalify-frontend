@@ -25,24 +25,6 @@
 				</div>
 			</form>
 
-			<div class="mt-8 border-t border-third py-2">
-				<p class="text-third/80">Login with</p>
-				<div class="flex flex-col gap-4 mt-4">
-					<NuxtLink to="https://strapi.denalify.com/api/connect/discord" class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
-						<img src="/icons/discord-logo.svg" class="h-5" alt="">	
-						Discord
-					</NuxtLink>
-					<NuxtLink to="https://strapi.denalify.com/api/connect/github" class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
-						<img src="/icons/github-logo.svg" class="h-5" alt="">	
-						Github
-					</NuxtLink>
-					<NuxtLink to="https://strapi.denalify.com/api/connect/google" class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
-						<img src="/icons/google-logo.svg" class="h-5" alt="">	
-						Google
-					</NuxtLink>
-				</div>
-			</div>
-
 			<div class="mt-8 border-t border-third py-2 text-white/70">
 				<p><NuxtLink to="/account/register" class="underline">Register</NuxtLink> if you don't have account</p>
 			</div>

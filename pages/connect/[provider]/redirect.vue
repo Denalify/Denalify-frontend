@@ -1,8 +1,6 @@
 <template>
   <div class="h-screen w-screnn bg-background text-second">
-	{{ route.query }}
 
-  {{ error }}
   </div>
 </template>
 

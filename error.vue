@@ -4,7 +4,7 @@
 			<NuxtErrorBoundary>
 				<div class="flex flex-col justify-center items-center max-w-xl relative">
 					<p class="z-0 absolute bottom-1/2 translate-y-1/3 text-[18rem] font-semibold tracking-widest text-transparent text-8xl bg-clip-text bg-gradient-to-b from-darkest/30 to-transparent">{{ error.statusCode }}</p>
-					<p class="text-darkest/40 z-50">{{ error.message }}</p>
+					<p class="mt-24 text-darkest/90 z-50">{{ error.message }}</p>
 					<button @click="handleClearError" class="z-[50] bg-second py-2 px-4 rounded-xl text-white mt-4 duration-300 hover:bg-second/80 hover:shadow-second/50 hover:shadow-xl">Go back</button>
 				</div>
 			</NuxtErrorBoundary>
@@ -12,6 +12,15 @@
 	</div>
 </template>
 <script setup lang="ts">
-defineProps(['error'])
+const route = useRoute()
+console.log(route.query)
+let error = null
+if (route.query) {
+	error = {message: route.query.error_description, statusCode: 401}
+} else {
+	error = defineProps(['error'])
+}
+
+
 const handleClearError = () => clearError({ redirect: '/' })
 </script>
