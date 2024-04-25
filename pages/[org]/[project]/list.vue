@@ -8,19 +8,21 @@
 		<PopupTaskSee v-if="seeTaskPopup" :taskid="taskid" @closeclicked="seeTaskPopup = false"  @edittask="editTask" @removetask="removetask" />
 		<PopupTaskEdit v-if="editTaskPopup" :taskid="taskid" :orgid="orgid" @closeclicked="editTaskPopup = false" />
 		<PopupTaskRemove v-if="removeTaskPopup" :taskid="taskid" @closeclicked="removeTaskPopup = false" />
+		<PopupProjectEdit v-if="editProjectPopup" :projectid="projectid" @closeclicked="editProjectPopup = false" />
 
 
 		<div class="text-white w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col gap-2 justify-between">
-			<div>
-				<div class="flex items-center gap-3">
+			<div class="flex justify-between">
+				<div class="projectTitle pr-24 flex items-center gap-3" :data-projectid="findProject.data[0].id">
 					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
 					<div class="flex">
 						<NuxtLink :to="'/'+org" class="text-3xl text-white/80 hover:text-white duration-100">{{ org }}/</NuxtLink>
 						<h3>{{ projectdata.nazwa }}</h3>
 					</div>
+					<button @click="editProject" class="edit hidden">
+						<img class="h-6 w-6" src="/icons/pencil.svg" alt="Edit">
+					</button>
 				</div>
-
-				
 			</div>
 			<div class="flex items-end projectNav">
 				<NuxtLink :to="'/'+org+'/'+project+'/list'"  class="flex items-center gap-2 px-5 py-2 rounded-t-xl">
@@ -115,118 +117,189 @@
 	</div>
 </template>
 
+
 <script lang="ts" setup>
 definePageMeta({
-	layout: 'project'
+  	layout: 'project'
 })
 
+
 const { org, project } = useRoute().params;
+import draggable from 'vuedraggable'
 
 const router = useRouter()
+
 
 let orgid = ref()
 let projectdata: any[] = []
 let boardsdata: any[] = []
 
+let taskToMove = ref()
+let BoardFrom = ref()
+let BoardTo = ref()
+
+
+let end = (evt) => {
+	BoardFrom.value = evt.from.getAttribute('data-boardid')
+	BoardTo.value = evt.to.getAttribute('data-boardid')
+
+	if (BoardFrom.value != BoardTo.value) {
+		const { data: deltask} = useFetch(
+		`https://strapi.denalify.com/api/tasks/${taskToMove.value.id}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			}
+		})
+		movedtask()
+	}
+
+}
+
+
+let change = (evt) => {
+	if (evt.added?.element.attributes) {
+		taskToMove.value = evt.added?.element
+	}
+}
+
+let movedtask = () => {
+	const { data: createtast} = useFetch(
+		`https://strapi.denalify.com/api/tasks`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+			body:{
+				data: {
+					title: taskToMove.value.attributes.title,
+					done: taskToMove.value.attributes.done,
+					end: taskToMove.value.attributes.end,
+					priority: taskToMove.value.attributes.priority,
+					content: taskToMove.value.attributes.content,
+					board: BoardTo.value
+				}
+			}
+		}
+	)
+
+	router.go(0)
+}
+
 
 const { data: organization } = await useFetch(
-  `https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
-	  headers: {
-		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	  },
+	`https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
 })
 orgid.value = organization.value.data[0].id
 
 const { data: findProject } = await useFetch(
-  `https://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
-	  headers: {
-		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	  },
-	  
+	`https://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		
 }) 
 
 
 const { data: pro, refresh: refpro } = await useFetch(
-  `https://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
-	  headers: {
-		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	  },
+	`https://strapi.denalify.com/api/pojects/${findProject.value.data[0].id}?populate=*`, {
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
 }) 
+
 projectdata = pro.value.data.attributes
 
 for (const board in projectdata.boards.data) {
-  const { data: boards } = await useFetch(
-  `https://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
-	  headers: {
-		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	  },
-  })
-  boardsdata.push(boards)
+	const { data: boards } = await useFetch(
+	`https://strapi.denalify.com/api/boards/${projectdata.boards.data[board].id}?populate=poject&populate=tasks&populate[tasks][populate]=users.avatar`, {
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+	})
+	boardsdata.push(boards)
+}
+
+let editProjectPopup = ref(false);
+let projectid = ref()
+let editProject = (e) => {
+	projectid.value = e.target.closest('.projectTitle').getAttribute('data-projectid')
+
+	editProjectPopup.value = true
 }
 
 let newBoardPopup = ref(false);
 let newBoard = () => {
-  newBoardPopup.value = true
+	newBoardPopup.value = true
 }
 let editBoardPopup = ref(false)
 let sectionid = ref('')
 let editSection = (e) => {
-  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
-  editBoardPopup.value = true
+	sectionid.value = e.target.closest('section').getAttribute('data-sectionid')
+	editBoardPopup.value = true
 }
 
 let removeBoardPopup = ref(false)
 let removeSection = (e) => {
-  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
-  removeBoardPopup.value = true
+	sectionid.value = e.target.closest('section').getAttribute('data-sectionid')
+	removeBoardPopup.value = true
 }
 
 let newTaskPopup = ref(false)
 let newTask = (e) => {
-  sectionid.value = e.target.closest('tr').getAttribute('data-sectionid')
-  newTaskPopup.value = true
+	sectionid.value = e.target.closest('section').getAttribute('data-sectionid')
+	newTaskPopup.value = true
 }
 
 
 let seeTaskPopup = ref(false)
 let taskid = ref()
 let seeTask = (e) => {
-  if (e.target != e.target.closest('.donemark')) {
-	  taskid.value = e.target.closest('tr').getAttribute('data-taskid')
-	  seeTaskPopup.value = true
-  }
+	if (e.target != e.target.closest('.donemark')) {
+		taskid.value = e.target.closest('section').getAttribute('data-taskid')
+		seeTaskPopup.value = true
+	}
 }
 
 
 let editTaskPopup = ref(false)
 let editTask = () => {
-  seeTaskPopup.value = false
-  editTaskPopup.value = true
+	seeTaskPopup.value = false
+	editTaskPopup.value = true
 }
 
 let removeTaskPopup = ref(false)
 let removetask = () => {
-  seeTaskPopup.value = false
-  removeTaskPopup.value = true
+	seeTaskPopup.value = false
+	removeTaskPopup.value = true
 }
 
 
 let markdone = (e, done) => {
-  taskid.value = e.target.closest('tr').getAttribute('data-taskid')
+	taskid.value = e.target.closest('section').getAttribute('data-taskid')
 
-  const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${taskid.value}`, {
-	  method: 'PUT',
-	  headers: {
-		  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-	  },
-	  body: {
-		  data: {
-			  done: !done
-		  }
-	  }
-  });
+	const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${taskid.value}`, {
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: {
+			data: {
+				done: !done
+			}
+		}
+	});
 
-  router.go(0)
+	router.go(0)
 }
-  
+	
 </script>
+
+<style>
+.projectTitle:hover .edit {
+	display: block;
+}
+</style>

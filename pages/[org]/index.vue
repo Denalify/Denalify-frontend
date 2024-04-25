@@ -77,7 +77,6 @@ const {data: orgs} = await useFetch(`https://strapi.denalify.com/api/orgbyname/$
 	},
 })
 
-console.log(orgs)
 let haveorg = ref(false)
 for (const organ in user.value.organizations) {
 	if (user.value.organizations[organ].name == org) {
