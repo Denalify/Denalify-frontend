@@ -8,17 +8,20 @@
 		<PopupTaskSee v-if="seeTaskPopup" :taskid="taskid" @closeclicked="seeTaskPopup = false"  @edittask="editTask" @removetask="removetask" />
 		<PopupTaskEdit v-if="editTaskPopup" :taskid="taskid" :orgid="orgid" @closeclicked="editTaskPopup = false" />
 		<PopupTaskRemove v-if="removeTaskPopup" :taskid="taskid" @closeclicked="removeTaskPopup = false" />
-
+		<PopupProjectEdit v-if="editProjectPopup" :projectid="projectid" @closeclicked="editProjectPopup = false" />
 
 		
 		<div class="text-white w-full h-28 border-b-2 border-first pt-3 px-3 flex flex-col gap-2 justify-between">
 			<div class="flex justify-between">
-				<div class="flex items-center gap-3">
+				<div class="projectTitle pr-24 flex items-center gap-3" :data-projectid="findProject.data[0].id">
 					<div class="h-12 w-12 rounded-xl" :style="'background-color: '+projectdata.color"></div>
 					<div class="flex">
 						<NuxtLink :to="'/'+org" class="text-3xl text-white/80 hover:text-white duration-100">{{ org }}/</NuxtLink>
 						<h3>{{ projectdata.nazwa }}</h3>
 					</div>
+					<button @click="editProject" class="edit hidden">
+						<img class="h-6 w-6" src="/icons/pencil.svg" alt="Edit">
+					</button>
 				</div>
 			</div>
 			<div class="flex items-end projectNav">
@@ -130,8 +133,6 @@ let end = (evt) => {
 	BoardFrom.value = evt.from.getAttribute('data-boardid')
 	BoardTo.value = evt.to.getAttribute('data-boardid')
 
-	console.log(BoardFrom.value, BoardTo.value)
-
 	if (BoardFrom.value != BoardTo.value) {
 		const { data: deltask} = useFetch(
 		`https://strapi.denalify.com/api/tasks/${taskToMove.value.id}`, {
@@ -149,7 +150,6 @@ let end = (evt) => {
 let change = (evt) => {
 	if (evt.added?.element.attributes) {
 		taskToMove.value = evt.added?.element
-		console.log(taskToMove.value)
 	}
 }
 
@@ -200,6 +200,7 @@ const { data: pro, refresh: refpro } = await useFetch(
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 }) 
+
 projectdata = pro.value.data.attributes
 
 for (const board in projectdata.boards.data) {
@@ -210,6 +211,14 @@ for (const board in projectdata.boards.data) {
 		},
 	})
 	boardsdata.push(boards)
+}
+
+let editProjectPopup = ref(false);
+let projectid = ref()
+let editProject = (e) => {
+	projectid.value = e.target.closest('.projectTitle').getAttribute('data-projectid')
+
+	editProjectPopup.value = true
 }
 
 let newBoardPopup = ref(false);
@@ -278,3 +287,9 @@ let markdone = (e, done) => {
 }
 	
 </script>
+
+<style>
+.projectTitle:hover .edit {
+	display: block;
+}
+</style>
