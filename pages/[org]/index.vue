@@ -19,7 +19,7 @@
 						<div>
 							<h4>{{ orgs.name }}</h4>
 							<p>Created: {{ orgs.createdAt.split('T')[0] }},</p>
-							<p>Admin: <span v-for="admin in orgs.admin_users.data">{{ admin.username }}, </span></p>
+							<p>Admin: <span v-for="admin in orgs.admin_users">{{ admin.username }}, </span></p>
 							<p>Invite code: <span class="bg-gray-700 px-2 py-1 rounded-lg text-white/60">{{ orgs.inviteCode }}</span></p>
 							<div class="flex gap-4">
 								<button @click="leaveorg = true" class="mt-4 px-3 py-1 bg-red-500 hover:bg-red-600 duration-100 rounded-xl">Leave</button>
