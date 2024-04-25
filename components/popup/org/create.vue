@@ -42,6 +42,20 @@ let formData = new FormData()
 
 let getFileObject = (e: any) => {
 	formData.append('files', e.target.files[0])
+
+	const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: formData
+	})
+	.then((res) => {
+		console.log(res)
+		for (let i = 0; i < res.data?.value.length; i++) {
+			logo.value = res.data?.value[i].id
+		}
+	})
 }
 
 let logo = ref()
@@ -54,36 +68,33 @@ let createOrg = () => {
 		},
 	})
 
-	const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		},
-		body: formData
-	})
-
-	for (let i = 0; i < imageupload.data.value.length; i++) {
-		logo.value = imageupload.data.value[i].id
-	}
-
+	let encCode = btoa(name.value)
+	let newCode = encCode.replaceAll('=', 'x').replaceAll('+', "x").replaceAll('-', "x").replaceAll('_', "x")
+			
 	const newOrg = useFetch(
-	`https://strapi.denalify.com/api/organizations`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		},
-		body: {
-			data: {
-				name: name.value,
-				pojects: null,
-				tasks: null,
-				users: usr.data.value.id,
-				admin_users: usr.data.value.id,
-				logo: logo.value,
-				inviteCode: btoa(name.value)
+		`https://strapi.denalify.com/api/organizations`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+			body: {
+				data: {
+					name: name.value,
+					pojects: null,
+					tasks: null,
+					users: usr.data.value.id,
+					admin_users: usr.data.value.id,
+					logo: logo.value,
+					inviteCode: newCode
+				}
 			}
-		}
-	})
+		})
+	
+	
+		
+	navigateTo(`/${name.value}`)
+
+	emit('closeclicked')
 
 
 }

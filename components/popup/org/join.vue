@@ -49,10 +49,11 @@ let createOrg = () => {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 	})
+	.then((res) => {
+		
+	console.log(res.data.value)
 
-	console.log(inviteorg.data.value)
-
-	if (inviteorg.data.value) {
+	if (res.data.value) {
 		console.log('success')
 
 		router.go(0)
@@ -64,6 +65,8 @@ let createOrg = () => {
 			error.value = ''
 		}, 6000);
 	}
+	})
+
 
 
 

@@ -30,32 +30,40 @@ const router = useRouter()
 let leaveOrg = () => {
 
 
-	const usr = useFetch(`https://strapi.denalify.com/api/users/me?fields[0]=id`, {
+	const {data: usr} = useFetch(`https://strapi.denalify.com/api/users/me?fields[0]=id`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 	})
 
+	console.log(usr)
 
-	const leave = useFetch(
-	`https://strapi.denalify.com/api/organizations/${props.orgid}`, {
-		method: 'PUT',
-		headers: {
-			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-			Accept: 'application/json',
-            'Content-Type': 'application/json',
-		},
-		body: {
-			data: {
-				users: {
-					disconnect: usr.data.value.id
+	setTimeout(() => {
+		const leave = useFetch(
+		`https://strapi.denalify.com/api/organizations/${props.orgid}`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: {
+				data: {
+					users: {
+						disconnect: usr.value.id
+					}
 				}
-			}
 
-		}
-	})
+			}
+		})
+		.then(() => {
+			router.push('/user')
+		})
+	}, 150);
+
+	
   
 
-	router.push('/user')
+	
 }
   </script>
