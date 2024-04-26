@@ -11,9 +11,9 @@
 		</div>
 	</div>
 
-	<div class="flex w-full h-full">
-		<div class="w-full h-full p-12">
-			<div class="w-full h-full bg-first/50 rounded-3xl p-6 relative">
+	<div class="grid grid-cols-5 w-full h-full">
+		<div class="col-span-3 w-full h-full p-12 relative">
+			<div class="overflow-y-auto bg-first/50 rounded-3xl p-6 absolute left-12 top-12 right-12 bottom-12">
 				<button @click="editProfile"  class="bg-green-600 hover:bg-green-600/60 duration-100 px-3 py-1.5 rounded-lg absolute right-3 top-3"><img class="h-4 w-4" src="/icons/pencil.svg" alt=""></button>
 				<div class="flex flex-wrap gap-6">
 					<div>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="w-2/3 2xl:w-full h-full p-12">
+		<div class="col-span-2 w-full h-full p-12">
 			<div class="w-full h-full flex flex-col gap-12">
 				<div class="bg-first/50 h-full w-full rounded-3xl flex justify-center items-center">
 					<p class="animate-pulse">Coming soon...</p>
