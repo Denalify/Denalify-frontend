@@ -3,9 +3,8 @@ import type { Config } from 'tailwindcss'
 export default <Partial<Config>>{
 	theme: {
 		colors: {
-			'primary': '#f15d9c',
+			'primary': '#cf7032',
 			'light': '#feeff5',
-			'darker': '#542137',
 			'darkest': '#4D404E',
 			'first': '#47250b',
 			'second': '#6e3e19',

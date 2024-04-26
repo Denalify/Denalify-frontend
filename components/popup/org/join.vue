@@ -17,7 +17,7 @@
 				</div>
 				<div class="mt-4 text-white">
 
-					<button @click="createOrg"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Join</button>
+					<button @click="createOrg"  class="bg-primary hover:bg-primary/60 duration-100 px-4 py-2 rounded-xl">Join</button>
 				</div>
 
 				<div v-if="error" class="mt-4 bg-red-500/40 border border-red-500 rounded-2xl py-4 px-2 text-white">

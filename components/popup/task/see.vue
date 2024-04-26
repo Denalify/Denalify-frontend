@@ -212,7 +212,7 @@
 					</div>
 
 					<div class="flex items-end justify-end pb-5">
-						<button @click="sendComment" class="bg-third/60 px-3 py-1 rounded-xl">Send</button>
+						<button @click="sendComment" class="bg-primary hover:bg-primary/60 px-3 py-1 rounded-xl">Send</button>
 					</div>
 				</div>
 			</div>

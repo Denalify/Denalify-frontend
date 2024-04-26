@@ -82,15 +82,15 @@
 			<div class="mt-8 border-t border-third py-2">
 				<p class="text-third/80">Register with</p>
 				<div class="flex flex-col gap-4 mt-4">
-					<button class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
+					<button class="bg-primary hover:bg-primary/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
 						<img src="/icons/discord-logo.svg" class="h-5" alt="">	
 						Discord
 					</button>
-					<button class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
+					<button class="bg-primary hover:bg-primary/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
 						<img src="/icons/github-logo.svg" class="h-5" alt="">	
 						Github
 					</button>
-					<button class="bg-third hover:bg-third/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
+					<button class="bg-primary hover:bg-primary/60 px-5 py-1 rounded-xl text-white text-lg flex justify-center items-center gap-2">
 						<img src="/icons/google-logo.svg" class="h-5" alt="">	
 						Google
 					</button>

@@ -10,7 +10,7 @@
 				<p>Do you really want to leave this organization?</p>
 				</div>
 				<div class="mt-4 text-white">
-					<button @click="leaveOrg"  class="bg-third hover:bg-third/60 duration-100 px-4 py-2 rounded-xl">Yes, leave</button>
+					<button @click="leaveOrg"  class="bg-primary hover:bg-primary/60 duration-100 px-4 py-2 rounded-xl">Yes, leave</button>
 				</div>
 			</div>
 			
