@@ -79,7 +79,6 @@ let {data: task} = await useFetch(`https://strapi.denalify.com/api/tasks/${props
 	},
 })
 
-console.log(task.value.data.attributes)
 
 selectendUsers = ref(task.value.data.attributes.users.data)
 let name = ref(task.value.data.attributes.title)
@@ -91,11 +90,9 @@ for (const usr in task.value.data.attributes.users.data) {
 	console.log(task.value.data.attributes.users.data[usr].id)
 }
 
-console.log(selectendUsers)
 
 let editTask = () => {
 	
-	console.log(selectendUsers.value)
 	const newBoard = useFetch(
 		`https://strapi.denalify.com/api/tasks/${props.taskid}`, {
 			method: 'PUT',

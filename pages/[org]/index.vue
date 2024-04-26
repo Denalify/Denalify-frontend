@@ -1,16 +1,16 @@
 <template>
-	<div class="text-white h-full flex flex-col">
+	<div class="text-white h-full flex flex-col ">
 		<PopupOrgLeave v-if="leaveorg" @closeclicked="leaveorg = false" :orgid="orgs.id"/>
 
-		<div class="w-full px-4 py-8 flex justify-end border-b-2 border-first">
+		<div class="w-full px-4 py-4 flex justify-end border-b-2 border-first">
 			<div>
 				<p>👋 Hello, {{ user.username }}</p>
 			</div>
 		</div>
   
-		<div class="flex w-full h-full">
-			<div class="w-full h-full p-12">
-				<div class="w-full h-full bg-first/50 rounded-3xl p-6">
+		<div class="grid grid-cols-5 w-full h-full">
+			<div class="col-span-3 w-full h-full p-12 relative">
+				<div class="overflow-y-auto bg-first/50 rounded-3xl p-6 absolute left-12 top-12 right-12 bottom-12">
 					<div class="flex flex-wrap gap-6">
 						<div>
 							<img v-if="orgs.logo" class="rounded-2xl w-24 h-24 xl:h-36 xl:w-36 object-contain" :src="'https://strapi.denalify.com'+ orgs.logo.url" alt="">
@@ -45,7 +45,7 @@
 					</div>
 				</div>
 			</div>
-		  	<div class="w-2/3 2xl:w-full h-full p-12">
+		  	<div class="col-span-2 w-full h-full p-12">
 			  	<div class="w-full h-full flex flex-col gap-12">
 					<div class="bg-first/50 h-full w-full rounded-3xl p-6 flex justify-center items-center">
 					  	<p class="animate-pulse">Coming soon...</p>

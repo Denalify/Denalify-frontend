@@ -18,25 +18,57 @@
 
 		</div>
 	</div>
-  </template>
+</template>
   
-  <script lang="ts" setup>
-  const props = defineProps(['taskid']);
-  const emit = defineEmits(['closeclicked'])
-  
-  const router = useRouter()
+<script lang="ts" setup>
+const props = defineProps(['taskid']);
+const emit = defineEmits(['closeclicked'])
 
-  
-  let removetask = () => {
+const router = useRouter()
 
-	  const remtask = useFetch(
-	  `https://strapi.denalify.com/api/tasks/${props.taskid}`, {
-		  method: 'DELETE',
-		  headers: {
-			  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		  },
-	  })
-  
-	  router.go(0)
-  }
-  </script>
+let commentIds = ref([])
+
+const {data: task} = useFetch(
+	`https://strapi.denalify.com/api/tasks/${props.taskid}?populate=comments`, {
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+})
+.then((res) => {
+	console.log(res)
+
+	for (const comment in res.data.value.data.attributes.comments.data) {
+		console.log(res.data.value.data.attributes.comments.data[comment])
+		commentIds.value.push(res.data.value.data.attributes.comments.data[comment].id)
+	}
+
+	console.log(commentIds.value)
+})
+
+
+let removetask = () => {
+
+	const remtask = useFetch(
+	`https://strapi.denalify.com/api/tasks/${props.taskid}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+	})
+
+
+	for (const comId in commentIds.value) {
+
+		const remcom = useFetch(
+		`https://strapi.denalify.com/api/comments/${commentIds.value[comId]}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+		})
+		
+	}
+
+	router.go(0)
+}
+</script>

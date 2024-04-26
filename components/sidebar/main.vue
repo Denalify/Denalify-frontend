@@ -7,8 +7,9 @@
 
 		<div class="px-1 w-full h-full bg-first/30 border-2 border-first rounded-3xl">
 			<div class="menu h-full w-full flex flex-col justify-between py-6 overflow-y-auto">
-				<div id="top" class="flex justify-center">
+				<div id="top" class="flex flex-col items-center justify-center">
 					<img class="w-2/4" src="/logo.png" alt="denalify">
+					<p class="text-xl font-semibold text-white/90">Denalify</p>
 				</div>
 				<ClientOnly>
 					<div id="center" class="text-white px-1 my-8">
@@ -48,12 +49,12 @@
 					</div>
 				</ClientOnly>
 
-				<div id="bottom" class="w-full flex flex-col pl-4 gap-1">
-					<button @click="router.push('/user')" class="text-white text-lg flex gap-4 w-fit py-2 px-4 rounded-xl hover:bg-second/30 duration-150">
+				<div id="bottom" class="w-full flex flex-col px-4 gap-1">
+					<button @click="router.push('/user')" class="text-white text-lg flex gap-4 w-full py-2 px-4 rounded-xl hover:bg-second/30 duration-150">
 						<NuxtImg src="/icons/user.svg" class="w-6 h-6"/>
 						Profile
 					</button>
-					<button @click="logoutButton" class="text-white text-lg flex gap-4 w-fit py-2 px-4 rounded-xl hover:bg-second/30 duration-150">
+					<button @click="logoutButton" class="text-white text-lg flex gap-4 w-full py-2 px-4 rounded-xl hover:bg-second/30 duration-150">
 						<NuxtImg  src="/icons/sign-out.svg" class="w-6 h-6"/>
 						Sign Out
 					</button>

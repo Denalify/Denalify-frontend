@@ -241,8 +241,6 @@ const {data: user} = await useFetch(`https://strapi.denalify.com/api/users/me?fi
 	},
 });
 
-console.log(user)
-
 
 
 const {data: tasks} = await useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}?populate[comments][populate][user][populate][avatar][fields][0]=url&populate[comments][populate][user][fields][0]=firstname&populate[comments][populate][user][fields][1]=lastname&populate[comments][populate][user][fields][2]=username&populate[comments][sort][0]=createdAt:asc&populate[board][fields][0]=id&populate[subtask]=true&populate[users][populate][avatar][fields][0]=url&populate[users][fields][0]=firstname&populate[users][fields][1]=lastname&populate[users][fields][2]=username`, {
@@ -313,9 +311,6 @@ let sendComment = () => {
 				}
 			}
 		}).then((res) => {
-			console.log(res.data)
-			console.log(comments.value)
-
 			comments.value?.data.push(res.data.value.data)
 		})
 
@@ -400,7 +395,7 @@ let removeSubtask = async (e: any) => {
 	
 
 }
-console.log(comments.value)
+
 
 let removeComment = async (e: any) => {
 	let comid = e.target.closest('.removecomment').getAttribute('data-comid')

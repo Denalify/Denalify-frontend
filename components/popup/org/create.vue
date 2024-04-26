@@ -69,7 +69,7 @@ let createOrg = () => {
 	})
 
 	let encCode = btoa(name.value)
-	let newCode = encCode.replaceAll('=', 'x').replaceAll('+', "x").replaceAll('-', "x").replaceAll('_', "x")
+	let newCode = encCode.replaceAll('=', 'x').replaceAll('+', "x").replaceAll('-', "x").replaceAll('_', "x")+Math.floor(Math.random() * 256)
 			
 	const newOrg = useFetch(
 		`https://strapi.denalify.com/api/organizations`, {
