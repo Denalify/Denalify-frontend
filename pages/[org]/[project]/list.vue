@@ -75,8 +75,8 @@
 				<table class="w-full border-collapse">
 					<tr 
 						v-for="task in board.value.data.attributes.tasks.data" 
-						@click="seeTask" 
 						:data-taskid="task.id"	
+						@click="seeTask" 
 						class="z-0 w-full duration-200 cursor-pointer" 
 						:class="{'bg-green-600/20 border-y-2 border-green-700 hover:bg-green-600/30 opacity-70': task.attributes.done, 'bg-third/20 border-y-2 border-third/40 hover:bg-third/40': task.attributes.done == false}">
 						<td class="w-36 py-2 pl-1">
@@ -259,7 +259,8 @@ let seeTaskPopup = ref(false)
 let taskid = ref()
 let seeTask = (e) => {
 	if (e.target != e.target.closest('.donemark')) {
-		taskid.value = e.target.closest('section').getAttribute('data-taskid')
+		taskid.value = e.target.closest('tr').getAttribute('data-taskid')
+		console.log(taskid.value)
 		seeTaskPopup.value = true
 	}
 }
@@ -279,7 +280,7 @@ let removetask = () => {
 
 
 let markdone = (e, done) => {
-	taskid.value = e.target.closest('section').getAttribute('data-taskid')
+	taskid.value = e.target.closest('tr').getAttribute('data-taskid')
 
 	const changetaskdone = useFetch(`https://strapi.denalify.com/api/tasks/${taskid.value}`, {
 		method: 'PUT',

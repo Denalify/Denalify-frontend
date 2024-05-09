@@ -36,7 +36,8 @@
 			  Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		  },
 	  })
-  
-	  router.go(0)
+	  .then(()=> {
+		router.go(0)
+	})
   }
   </script>

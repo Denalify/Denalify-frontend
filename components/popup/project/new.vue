@@ -88,11 +88,11 @@ let createSection = () => {
 		}
 
 	})
-	// .then(()=> {
-	// 	slug = ''
+	.then(()=> {
+		slug = ''
 
-	//  	router.go(0)
-	// })
+	 	router.go(0)
+	})
 
 
   

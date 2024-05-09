@@ -111,8 +111,10 @@ let editTask = () => {
 			}
 
 	})
-
-	router.go(0)
+	.then(()=> {
+		router.go(0)
+	})
+	
 
 }
 </script>

@@ -89,12 +89,14 @@ let createOrg = () => {
 				}
 			}
 		})
-	
+		.then(()=> {
+			navigateTo(`/${name.value}`)
+
+			emit('closeclicked')
+		})
 	
 		
-	navigateTo(`/${name.value}`)
 
-	emit('closeclicked')
 
 
 }

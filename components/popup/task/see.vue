@@ -178,8 +178,11 @@
 							<span v-if="user.firstname && user.lastname">
 								{{ user.firstname[0].toUpperCase()+user.lastname[0].toUpperCase()}}
 							</span>
-							<span v-else>
+							<span v-if="user.username">
 								{{ user.username[0].toUpperCase()}}
+							</span>
+							<span v-else>
+								x
 							</span>
 						</div>
 					</div>
