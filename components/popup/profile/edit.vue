@@ -86,20 +86,21 @@ let getFileObject = (e: any) => {
 	formData.append('files', e.target.files[0])
 
 
-	const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
-		},
-		body: formData
-	}).then((res) => {
-		console.log(res.data)
+	if (formData) {
+		const imageupload = useFetch(`https://strapi.denalify.com/api/upload`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+			},
+			body: formData
+		}).then((res) => {
+			console.log(res.data)
 
-		for (let i = 0; i < res.data.value?.length; i++) {
-			profileAvatar = res.data?.value[i].id
-		}
-	})
-
+			for (let i = 0; i < res.data.value?.length; i++) {
+				profileAvatar = res.data?.value[i].id
+			}
+		})
+	}
 }
 
 

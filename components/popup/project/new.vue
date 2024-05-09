@@ -88,10 +88,13 @@ let createSection = () => {
 		}
 
 	})
+	.then(()=> {
+		slug = ''
 
-	slug = ''
+	 	router.go(0)
+	})
 
-	router.go(0)
+
   
 }
 </script>

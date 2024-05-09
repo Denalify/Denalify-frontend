@@ -98,9 +98,11 @@ let createTask = () => {
 
 			}
 
+	}).then(()=> {
+		router.go(0)
 	})
 
-	router.go(0)
+	
 
 }
 </script>
