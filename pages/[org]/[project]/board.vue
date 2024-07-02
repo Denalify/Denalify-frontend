@@ -140,8 +140,10 @@ let end = (evt) => {
 			headers: {
 				Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 			}
+		}).then(e => {
+			movedtask()
 		})
-		movedtask()
+		
 	}
 
 }
@@ -172,8 +174,9 @@ let movedtask = () => {
 			}
 		}
 	)
-
-	router.go(0)
+	.then(e => {
+		router.go(0)
+	})
 }
 
 

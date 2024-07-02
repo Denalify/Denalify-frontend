@@ -35,7 +35,7 @@
 					<div v-if="orgs.length > 0" class="flex flex-col gap-2 mt-2 h-full">
 						<NuxtLink :to="'/'+org.attributes.name" v-for="org in orgs" class="p-2 bg-second/30 rounded-xl border-2 border-second flex gap-3">
 							<img v-if="org.attributes.logo.data" class="rounded-xl w-14 h-14 object-contain" :src="'https://strapi.denalify.com'+org.attributes.logo.data.attributes.url" alt="logo">
-							<div v-else class="h-28 w-28 bg-gray-500 rounded-xl"></div>
+							<div v-else class="h-14 w-14 bg-gray-500 rounded-xl"></div>
 							<div>
 								<p class="mt-1 text-slate-200">{{ org.attributes.name }}</p>
 								<p class="text-slate-200">Users: {{ org.attributes.users.data.length }}</p>

@@ -76,6 +76,7 @@ export default defineNuxtConfig({
 	strapi: {
 		devtools: true,
 		url: 'https://strapi.denalify.com',
+		admin: '/admin',
 		prefix: '/api',
 		version: 'v4',
 		cookie: {},
