@@ -113,15 +113,27 @@
 					<p>Subtasks</p>
 
 					<div class="py-2 px-2 flex flex-col gap-1 text-white">
-						<div v-for="sub in task.subtask" class="subtask w-full flex gap-3 py-2 px-2 hover:bg-second/40 rounded-lg duration-100">
-							<div :data-subid="sub.id" class="subid flex w-full justify-between">
-								<div class="flex items-center gap-2">
-									<button v-if="sub.done"  class="donemark h-6 min-w-6 bg-green-500/30 p-1 rounded-full border-2 border-green-800/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
-									<button v-else class="donemark h-6 min-w-6 bg-first/60 p-1 rounded-full border-2 border-third/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
-									<p class="text-sm">{{ sub.content }}</p>
+						<div v-for="sub in task.subtask" class="subtask">
+							<div v-if="sub.done" class="w-full flex gap-3 py-2 px-2 bg-green-600/10 hover:bg-green-600/40 rounded-lg duration-100">
+								<div :data-subid="sub.id" class="subid flex w-full justify-between">
+									<div class="flex items-center gap-2">
+										<button @click="doneSubtask"  class="donemark h-6 min-w-6 bg-green-500/30 p-1 rounded-full border-2 border-green-800/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+										<p class="text-sm">{{ sub.content }}</p>
+									</div>
+									<div class="editbuttons hidden gap-2">
+										<button @click="removeSubtask" class="p-1 rounded-lg bg-red-600/80"><nuxt-img class="h-4 w-4" src="/icons/trash.svg"  alt="X" /></button>
+									</div>
 								</div>
-								<div class="editbuttons hidden gap-2">
-									<button @click="removeSubtask" class="p-1 rounded-lg bg-red-600/40"><nuxt-img class="h-4 w-4" src="/icons/trash.svg"  alt="X" /></button>
+							</div>
+							<div v-else class="w-full flex gap-3 py-2 px-2 hover:bg-second/40 rounded-lg duration-100">
+								<div :data-subid="sub.id" class="subid flex w-full justify-between">
+									<div class="flex items-center gap-2">
+										<button @click="doneSubtask"  class="donemark h-6 min-w-6 bg-first/60 p-1 rounded-full border-2 border-third/50"><img class="donemark h-3 w-3" src="/icons/check.svg" alt="x"></button>
+										<p class="text-sm">{{ sub.content }}</p>
+									</div>
+									<div class="editbuttons hidden gap-2">
+										<button @click="removeSubtask" class="p-1 rounded-lg bg-red-600/40"><nuxt-img class="h-4 w-4" src="/icons/trash.svg"  alt="X" /></button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -398,6 +410,37 @@ let removeSubtask = async (e: any) => {
 	
 
 }
+
+let doneSubtask = async (e: any) => {
+	let subid = e.target.closest('.subid').getAttribute('data-subid')
+
+	let subtasks = tasks.value.data.attributes.subtask
+
+	let updateFromSubtasks = (value, index, arr) => {
+		console.log(value)
+		if(value.id == subid){ 
+			arr[index].done = !arr[index].done
+			return true
+		}
+		return false
+	}
+
+	const x = subtasks.filter(updateFromSubtasks)
+
+	console.log(x)
+
+	const updateSub = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}?fields[0]=id&populate[subtask]=true`, {
+		method: "PUT",
+		headers: {
+			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
+		},
+		body: {
+			data: {
+				subtask: subtasks
+			}
+		}
+	})
+}	
 
 
 let removeComment = async (e: any) => {
