@@ -44,6 +44,7 @@ const router = useRouter()
 
 let name = ref()
 let color = ref()
+let slug = ref()
 
 
 let proj = await useFetch(
@@ -60,6 +61,26 @@ let proj = await useFetch(
 
 let editproject = () => {
 
+	let preslug = name.value.split(' ')
+
+	console.log(preslug)
+	if (preslug.length > 0) {
+		for (let i = 0; i < preslug.length; i++) {
+			if (i+1 == preslug.length) {
+				slug = slug+preslug[i]
+			} else {
+				slug = slug+preslug[i]+"-"
+			}
+		}
+
+		console.log(slug)
+	} else {
+		slug = preslug
+	}
+
+	console.log(slug)
+
+
 	const newBoard = useFetch(
 	`https://strapi.denalify.com/api/pojects/${props.projectid}`, {
 		method: 'PUT',
@@ -70,6 +91,7 @@ let editproject = () => {
 			data: {
 				nazwa: name.value,
 				color: color.value,
+				slug: slug.value
 			}
 
 		}

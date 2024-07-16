@@ -92,6 +92,10 @@ for (const usr in task.value.data.attributes.users.data) {
 
 
 let editTask = () => {
+
+	if (priority.value = 'sel') {
+		priority.value = 'none'
+	}
 	
 	const newBoard = useFetch(
 		`https://strapi.denalify.com/api/tasks/${props.taskid}`, {

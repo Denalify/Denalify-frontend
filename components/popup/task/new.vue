@@ -81,6 +81,13 @@ let date = ref()
 
 let createTask = () => {
 	
+
+	if (priority.value = 'sel') {
+		priority.value = 'none'
+	}
+
+	console.log(selectendUsers.value)
+
 	const newBoard = useFetch(
 		`https://strapi.denalify.com/api/tasks`, {
 			method: 'POST',

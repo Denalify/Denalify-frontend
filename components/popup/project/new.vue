@@ -85,7 +85,7 @@ let createSection = () => {
 		}
 
 	})
-	.then(()=> {
+	.then(e => {
 		slug = ''
 
 	 	router.go(0)
