@@ -94,7 +94,6 @@ let getFileObject = (e: any) => {
 			},
 			body: formData
 		}).then((res) => {
-			console.log(res.data)
 
 			for (let i = 0; i < res.data.value?.length; i++) {
 				profileAvatar = res.data?.value[i].id
@@ -106,7 +105,6 @@ let getFileObject = (e: any) => {
 
 let editprofile = () => {
 
-	console.log("avatar: ",profileAvatar)
 
 	const edit = useFetch(
 	`https://strapi.denalify.com/api/user/me`, {

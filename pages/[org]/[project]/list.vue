@@ -260,7 +260,6 @@ let taskid = ref()
 let seeTask = (e) => {
 	if (e.target != e.target.closest('.donemark')) {
 		taskid.value = e.target.closest('tr').getAttribute('data-taskid')
-		console.log(taskid.value)
 		seeTaskPopup.value = true
 	}
 }

@@ -88,7 +88,6 @@ let date = ref(task.value.data.attributes?.end)
 
 for (const usr in task.value.data.attributes.users.data) {
 	selectendUsers.value.push(task.value.data.attributes.users.data[usr].id)
-	console.log(task.value.data.attributes.users.data[usr].id)
 }
 
 

@@ -280,7 +280,6 @@ let desc = new Editor({
     ],
     content: task.value.content,
 	onBlur({ editor, event }) {
-    	 console.log(editor.getHTML())
 		 if (editor.getHTML() != task.value.content) {
 			const tasked = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}`, {
 				method: 'PUT',
@@ -364,7 +363,6 @@ let createNewSubtask = async () => {
 	subtaks.push(newsubtaskdata.value)
 
 
-	console.log(subtaks)
 	const newSub = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}?fields[0]=id&populate[subtask]=true`, {
 		method: "PUT",
 		headers: {
@@ -378,7 +376,6 @@ let createNewSubtask = async () => {
 	})
 
 	newSubtask.value = ''
-	console.log(newSubtask.value)
 }
 
 let removeSubtask = async (e: any) => {
@@ -417,7 +414,6 @@ let doneSubtask = async (e: any) => {
 	let subtasks = tasks.value.data.attributes.subtask
 
 	let updateFromSubtasks = (value, index, arr) => {
-		console.log(value)
 		if(value.id == subid){ 
 			arr[index].done = !arr[index].done
 			return true
@@ -426,8 +422,6 @@ let doneSubtask = async (e: any) => {
 	}
 
 	const x = subtasks.filter(updateFromSubtasks)
-
-	console.log(x)
 
 	const updateSub = useFetch(`https://strapi.denalify.com/api/tasks/${props.taskid}?fields[0]=id&populate[subtask]=true`, {
 		method: "PUT",

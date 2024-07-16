@@ -36,7 +36,6 @@ let leaveOrg = () => {
 		},
 	})
 
-	console.log(usr)
 
 	setTimeout(() => {
 		const leave = useFetch(

@@ -51,7 +51,6 @@ let createOrg = () => {
 	})
 	.then((res) => {
 		
-	console.log(res.data.value)
 
 	if (res.data.value) {
 		console.log('success')

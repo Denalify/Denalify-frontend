@@ -51,7 +51,6 @@ let getFileObject = (e: any) => {
 		body: formData
 	})
 	.then((res) => {
-		console.log(res)
 		for (let i = 0; i < res.data?.value.length; i++) {
 			logo.value = res.data?.value[i].id
 		}

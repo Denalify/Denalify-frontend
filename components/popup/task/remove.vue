@@ -35,14 +35,11 @@ const {data: task} = useFetch(
 		},
 })
 .then((res) => {
-	console.log(res)
 
 	for (const comment in res.data.value.data.attributes.comments.data) {
-		console.log(res.data.value.data.attributes.comments.data[comment])
 		commentIds.value.push(res.data.value.data.attributes.comments.data[comment].id)
 	}
 
-	console.log(commentIds.value)
 })
 
 

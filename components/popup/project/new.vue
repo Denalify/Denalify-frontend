@@ -53,7 +53,6 @@ let createSection = () => {
 
 	let preslug = name.value.split(' ')
 
-	console.log(preslug)
 	if (preslug.length > 0) {
 		for (let i = 0; i < preslug.length; i++) {
 			if (i+1 == preslug.length) {
@@ -63,12 +62,10 @@ let createSection = () => {
 			}
 		}
 
-		console.log(slug)
 	} else {
 		slug = preslug
 	}
 
-	console.log(slug)
 
 	const newBoard = useFetch(
 	`https://strapi.denalify.com/api/pojects`, {

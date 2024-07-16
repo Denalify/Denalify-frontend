@@ -100,20 +100,6 @@ const {data: projects} = await useFetch('https://strapi.denalify.com/api/pojects
 })
 
 
-// for(const org in orgs){
-
-// 	orgs[org].attributes.pojects = []
-
-// 	for (const project in projects.value.data) {
-// 		orgs[org].attributes.pojects += JSON.parse(projects.value.data[project])
-// 	}
-
-// 	console.log(orgs[org].attributes)
-// }
-
-
-
-
 let createOrg = ref(false)
 let toggleOrg = (e) => {
 	e.target.closest('div').querySelector('.projects').classList.toggle('hidden')

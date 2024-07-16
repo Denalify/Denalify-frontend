@@ -62,7 +62,6 @@ const emit = defineEmits(['closeclicked'])
 
 const router = useRouter()
   
-console.log(props)
 
 let users = ref()
 
