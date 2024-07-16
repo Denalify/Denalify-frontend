@@ -125,4 +125,5 @@ let editprofile = () => {
 	})
 
 }
-  </script>
+
+</script>
