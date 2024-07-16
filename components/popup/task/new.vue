@@ -36,7 +36,8 @@
 								<li v-for="user in users.data"  class="w-full border-b border-second rounded-t-lg">
 									<div class="flex items-center ps-3">
 										<input v-model="selectendUsers" :id="user.attributes.username" type="checkbox" :value="user.id" class="w-4 h-4 text-third bg-gray-100 border-gray-300 rounded focus:ring-third focus:ring-2">
-										<label :for="user.attributes.username" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{user.attributes.firstname }} {{ user.attributes.lastname }} <span class="text-xd text-white/60"> ({{ user.attributes.username }})</span></label>
+										<label v-if="user.attributes.firstname && user.attributes.lastname" :for="user.attributes.username" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{user.attributes.firstname }} {{ user.attributes.lastname }} <span class="text-xd text-white/60"> ({{ user.attributes.username }})</span></label>
+										<label v-else :for="user.attributes.username" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{user.attributes.username }} </label>
 									</div>
 								</li>
 							</ul>
@@ -61,6 +62,8 @@ const emit = defineEmits(['closeclicked'])
 
 const router = useRouter()
   
+console.log(props)
+
 let users = ref()
 
 let selectendUsers = ref([])
@@ -73,14 +76,12 @@ const {data: org} = await useFetch(`https://strapi.denalify.com/api/organization
 users.value = org.value.data.attributes.users;
 
 
-
 let name = ref()
 let priority = ref('sel')
 let date = ref()
 
 let createTask = () => {
 	
-	console.log(selectendUsers.value)
 	const newBoard = useFetch(
 		`https://strapi.denalify.com/api/tasks`, {
 			method: 'POST',

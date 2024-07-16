@@ -119,7 +119,6 @@ import draggable from 'vuedraggable'
 
 const router = useRouter()
 
-
 let orgid = ref()
 let projectdata: any[] = []
 let boardsdata: any[] = []
@@ -181,12 +180,12 @@ let movedtask = () => {
 
 
 const { data: organization } = await useFetch(
-	`https://strapi.denalify.com/api/organizations?filters[name][$eqi]=${org}&populate=*`, {
+	`https://strapi.denalify.com/api/orgbyname/${org}`, {
 		headers: {
 			Authorization: `Bearer ${useCookie('strapi_jwt').value}`,
 		},
 })
-orgid.value = organization.value.data[0].id
+orgid.value = organization.value.id
 
 const { data: findProject } = await useFetch(
 	`https://strapi.denalify.com/api/pojects?filters[slug][$eqi]=${project}&fields[0]=id`, {
