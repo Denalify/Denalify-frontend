@@ -17,7 +17,7 @@
 						
 							<div v-for="org in orgs" :data-orgid="org.id"  class="organization mt-3 bg-first/70 py-2 px-2 rounded-xl duration-150">
 								
-								<button @click="toggleOrg" class="w-full flex items-center gap-4">
+								<button @click="toggleOrg" class="w-full flex items-center justify-between gap-4">
 									<p>{{ org.attributes.name }}</p>
 									<NuxtImg src="/icons/caret-down.svg" alt="\/" class="h-4 w-4 arrow duration-150 -rotate-90" />
 								</button>
