@@ -93,7 +93,7 @@ for (const usr in task.value.data.attributes.users.data) {
 
 let editTask = () => {
 
-	if (priority.value = 'sel') {
+	if (priority.value == 'sel') {
 		priority.value = 'none'
 	}
 	
