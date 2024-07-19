@@ -82,7 +82,7 @@ let date = ref()
 let createTask = () => {
 	
 
-	if (priority.value = 'sel') {
+	if (priority.value == 'sel') {
 		priority.value = 'none'
 	}
 
