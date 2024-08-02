@@ -6,9 +6,6 @@ export default defineNuxtConfig({
 			enabled: true
 		}
 	},
-	server: {
-		port: 3010,
-	  },
   	app: {
 		head: {
 			title: 'Denalify - Project manager',
