@@ -6,6 +6,15 @@ export default defineNuxtConfig({
 			enabled: true
 		}
 	},
+	vite: {
+		server: {
+		  	hmr: {
+				protocol: "wss",
+				clientPort: 443,
+				path: "hmr/",
+			},
+		},
+	},
   	app: {
 		head: {
 			title: 'Denalify - Project manager',
