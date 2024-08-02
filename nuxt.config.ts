@@ -1,12 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { 
-	enabled: true,
-	timeline: {
-		enabled: true
-	}
-},
-  app: {
+	devtools: { 
+		enabled: true,
+		timeline: {
+			enabled: true
+		}
+	},
+	server: {
+		port: 3010,
+	  },
+  	app: {
 		head: {
 			title: 'Denalify - Project manager',
 			htmlAttrs: {
