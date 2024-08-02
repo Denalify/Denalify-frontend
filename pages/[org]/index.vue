@@ -48,7 +48,7 @@
 		  	<div class="col-span-2 w-full h-full p-12">
 			  	<div class="w-full h-full flex flex-col gap-12">
 					<div class="bg-first/50 h-full w-full rounded-3xl p-6 flex justify-center items-center">
-					  	<p class="animate-pulse">Coming soon...</p>
+					  	<p>Discord notifications</p>
 				  	</div>
 					<div class="bg-first/50 h-full w-full rounded-3xl p-6 flex justify-center items-center">
 						<p class="animate-pulse">Coming soon...</p>
